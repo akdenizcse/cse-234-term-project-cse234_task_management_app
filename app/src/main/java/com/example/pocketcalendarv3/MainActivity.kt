@@ -31,13 +31,13 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ChangePage() {
+fun ChangePage(){
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "UserPage") {
-        composable(route = "LoginPage") {
+
+    NavHost(navController = navController , startDestination = "LoginPage"){
+        composable(route = "LoginPage"){
             LoginPageView(navController = navController)
         }
-
 
     }
 }

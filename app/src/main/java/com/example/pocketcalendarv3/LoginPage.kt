@@ -47,6 +47,7 @@ import com.example.pocketcalendarv3.ui.theme.DefaultBlue
 import com.example.pocketcalendarv3.ui.theme.TextFieldGray
 import com.example.pocketcalendarv3.ui.theme.fontFamily
 
+
 @Composable
 fun LoginPageView(modifier: Modifier = Modifier, navController: NavController) {
 
@@ -56,6 +57,7 @@ fun LoginPageView(modifier: Modifier = Modifier, navController: NavController) {
     var password by remember {
         mutableStateOf("")
     }
+
     Column(
         Modifier
             .fillMaxWidth()
@@ -83,8 +85,9 @@ fun LoginPageView(modifier: Modifier = Modifier, navController: NavController) {
             fontFamily = FontFamily.Default,
             color = Color(0xFF9A9A9A),
             fontWeight = FontWeight.Medium,
-        )
 
+
+            )
         Row(modifier = Modifier.padding(PaddingValues(top = 72.dp))) {
             Text(
                 text = "-Login to your account-",
@@ -95,6 +98,7 @@ fun LoginPageView(modifier: Modifier = Modifier, navController: NavController) {
             )
 
         }
+
         TextField(
             value = email, onValueChange = { email = it },
             modifier = Modifier
@@ -116,7 +120,9 @@ fun LoginPageView(modifier: Modifier = Modifier, navController: NavController) {
                 )
             },
 
+
             )
+
         TextField(
             value = password, onValueChange = { password = it },
             modifier = Modifier
@@ -137,7 +143,7 @@ fun LoginPageView(modifier: Modifier = Modifier, navController: NavController) {
 
             )
         TextButton(
-            onClick = { navController.navigate("ForgotYourPasswordPage") },
+            onClick = { },
             modifier = Modifier
                 .align(Alignment.Start)
                 .padding(horizontal = 12.dp)
@@ -162,7 +168,7 @@ fun LoginPageView(modifier: Modifier = Modifier, navController: NavController) {
         ) {
             Text(text = "Don't you have an account?", fontSize = 12.sp, textAlign = TextAlign.Left)
             TextButton(
-                onClick = { navController.navigate("RegisterPage") },
+                onClick = {  },
                 modifier = Modifier.padding(start = 16.dp)
             ) {
                 Text(text = "Sign Up", fontSize = 12.sp)
@@ -178,6 +184,7 @@ fun LoginPageView(modifier: Modifier = Modifier, navController: NavController) {
             )
         }
 
-    }
 
     }
+
+}
