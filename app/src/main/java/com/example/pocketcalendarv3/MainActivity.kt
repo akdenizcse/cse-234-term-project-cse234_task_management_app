@@ -14,7 +14,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.pocketcalendarv3.ui.theme.PocketCalendarV3Theme
 
 
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +31,13 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ChangePage(){
+fun ChangePage() {
     val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = "UserPage") {
+        composable(route = "LoginPage") {
+            LoginPageView(navController = navController)
+        }
 
 
+    }
 }
