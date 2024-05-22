@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -107,7 +108,27 @@ fun LoginPageView(modifier: Modifier = Modifier, navController: NavController) {
                 )
             },
 
+            )
+        TextField(
+            value = password, onValueChange = { password = it },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 24.dp)
+                .padding(horizontal = 16.dp)
+                .clip(RoundedCornerShape(15.dp))
+                .border(BorderStroke(1.dp, DefaultBlue), RoundedCornerShape(15.dp)),
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = Color.White,
+                focusedContainerColor = Color.White
+            ),
+
+
+            label = { Text(text = "Password", color = TextFieldGray) },
+            leadingIcon = { Icon(Icons.Filled.Lock, contentDescription = "", tint = DefaultBlue) },
+
 
             )
+
+
     }
 }
