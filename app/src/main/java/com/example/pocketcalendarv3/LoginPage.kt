@@ -3,6 +3,7 @@ package com.example.pocketcalendarv3
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -65,6 +66,16 @@ fun LoginPageView(modifier: Modifier = Modifier, navController: NavController) {
             fontWeight = FontWeight.Medium,
             )
 
+        Row(modifier = Modifier.padding(PaddingValues(top = 72.dp))) {
+            Text(
+                text = "-Login to your account-",
+                color = Color.Black,
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Medium,
+                fontSize = 12.sp
+            )
+
+        }
 
     }
 }
