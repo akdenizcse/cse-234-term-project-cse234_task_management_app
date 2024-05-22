@@ -1,22 +1,29 @@
 package com.example.pocketcalendarv3
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -28,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -128,7 +136,48 @@ fun LoginPageView(modifier: Modifier = Modifier, navController: NavController) {
 
 
             )
+        TextButton(
+            onClick = { navController.navigate("ForgotYourPasswordPage") },
+            modifier = Modifier
+                .align(Alignment.Start)
+                .padding(horizontal = 12.dp)
+        ) {
+            Text(text = "Forget Your Password?")
+        }
+        FilledTonalButton(
+            onClick = { /*TODO: Kullanıcı bilgileri kontrol edilip ona göre yönlendirme işlemi yapılacak*/ },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .height(48.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = DefaultBlue)
 
+
+        ) {
+            Text(text = "Login")
+        }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(horizontal = 16.dp),
+        ) {
+            Text(text = "Don't you have an account?", fontSize = 12.sp, textAlign = TextAlign.Left)
+            TextButton(
+                onClick = { navController.navigate("RegisterPage") },
+                modifier = Modifier.padding(start = 16.dp)
+            ) {
+                Text(text = "Sign Up", fontSize = 12.sp)
+
+            }
+        }
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+            Image(
+                painter = painterResource(id = R.drawable.logo_foreground),
+                contentDescription = "",
+                alignment = Alignment.BottomCenter,
+                modifier = Modifier.clip(CircleShape)
+            )
+        }
 
     }
-}
+
+    }
