@@ -143,7 +143,7 @@ fun LoginPageView(modifier: Modifier = Modifier, navController: NavController) {
 
             )
         TextButton(
-            onClick = { },
+            onClick = {navController.navigate("ForgotYourPasswordPage") },
             modifier = Modifier
                 .align(Alignment.Start)
                 .padding(horizontal = 12.dp)

@@ -38,6 +38,8 @@ fun ChangePage(){
         composable(route = "LoginPage"){
             LoginPageView(navController = navController)
         }
-
+        composable(route = "ForgotYourPasswordPage"){
+            ForgetYourPasswordView(navController = navController)
+        }
     }
 }
