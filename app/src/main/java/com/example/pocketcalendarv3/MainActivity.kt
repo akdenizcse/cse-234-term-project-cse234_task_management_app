@@ -41,5 +41,8 @@ fun ChangePage(){
         composable(route = "ForgotYourPasswordPage"){
             ForgetYourPasswordView(navController = navController)
         }
+        composable(route = "RegisterPage"){
+            RegisterPageView(navController = navController)
+        }
     }
 }
