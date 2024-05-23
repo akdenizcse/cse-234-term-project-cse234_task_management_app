@@ -172,7 +172,7 @@ fun LoginPageView(modifier: Modifier = Modifier, navController: NavController) {
         ) {
             Text(text = "Don't you have an account?", fontSize = 12.sp, textAlign = TextAlign.Left)
             TextButton(
-                onClick = {  },
+                onClick = { navController.navigate("RegisterPage") },
                 modifier = Modifier.padding(start = 16.dp)
             ) {
                 Text(text = "Sign Up", fontSize = 12.sp)
