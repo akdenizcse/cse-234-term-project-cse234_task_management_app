@@ -1,5 +1,7 @@
 package com.example.pocketcalendarv3
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +19,8 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -194,5 +198,21 @@ fun RegisterPageView(modifier: Modifier = Modifier, navController: NavController
 
 
             )
+
+        FilledTonalButton(
+            onClick = {
+
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .padding(top = 32.dp)
+                .height(48.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = DefaultBlue)
+
+
+        ){
+            Text(text = "Register", color = Color.White)
+        }
     }
 }
