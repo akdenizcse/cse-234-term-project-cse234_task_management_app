@@ -1,5 +1,6 @@
 package com.example.pocketcalendarv3
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -37,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -48,6 +50,8 @@ import androidx.navigation.NavController
 import com.example.pocketcalendarv3.ui.theme.DefaultBlue
 import com.example.pocketcalendarv3.ui.theme.TextFieldGray
 import com.example.pocketcalendarv3.ui.theme.fontFamily
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 
 
 @Composable
@@ -60,6 +64,9 @@ fun LoginPageView(modifier: Modifier = Modifier, navController: NavController) {
         mutableStateOf("")
     }
 
+    val db = Firebase.firestore
+
+    val context = LocalContext.current
 
 
     Column(
@@ -155,7 +162,34 @@ fun LoginPageView(modifier: Modifier = Modifier, navController: NavController) {
             Text(text = "Forget Your Password?")
         }
         FilledTonalButton(
-            onClick = { /*TODO: Kullanıcı bilgileri kontrol edilip ona göre yönlendirme işlemi yapılacak*/ },
+            onClick = {
+
+
+            db.collection("users").get().addOnSuccessListener { result ->
+                var bool = true
+                for (document in result) {
+                    if (document.data["email"] == email && document.data["password"] == password) {
+                        bool = false
+                        navController.navigate("MainPage")
+
+                    }
+                }
+                if (bool) {
+                    Toast.makeText(context, "Email or password is incorrect", Toast.LENGTH_SHORT).show()
+                    email = ""
+                    password = ""
+                }
+
+
+            }.addOnFailureListener { exception ->
+                println("Error getting documents: $exception")}
+
+
+
+
+
+
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
