@@ -35,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -45,10 +46,15 @@ import androidx.navigation.NavController
 import com.example.pocketcalendarv3.ui.theme.DefaultBlue
 import com.example.pocketcalendarv3.ui.theme.TextFieldGray
 import com.example.pocketcalendarv3.ui.theme.fontFamily
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 
 @Composable
 fun RegisterPageView(modifier: Modifier = Modifier, navController: NavController){
 
+    val db = Firebase.firestore
+
+    val context = LocalContext.current
 
     var username by remember {
         mutableStateOf("")
@@ -62,6 +68,13 @@ fun RegisterPageView(modifier: Modifier = Modifier, navController: NavController
     var registerPasswordAgain by remember {
         mutableStateOf("")
     }
+
+
+    val user = hashMapOf(
+        "username" to username,
+        "email" to registerEmail,
+        "password" to registerPassword,
+    )
 
 
 
@@ -202,6 +215,30 @@ fun RegisterPageView(modifier: Modifier = Modifier, navController: NavController
         FilledTonalButton(
             onClick = {
 
+                db.collection("users")
+                    .add(user)
+                    .addOnSuccessListener {
+                        Toast.makeText(context, "Success", Toast.LENGTH_SHORT)
+                            .show()
+                        registerEmail = ""
+                        registerPassword = ""
+                        registerPasswordAgain = ""
+                        username = ""
+
+                        navController.popBackStack()
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(
+                            context,
+                            "Something went wrong.",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                        registerEmail = ""
+                        registerPassword = ""
+                        registerPasswordAgain = ""
+                        username = ""
+                    }
             },
             modifier = Modifier
                 .fillMaxWidth()
