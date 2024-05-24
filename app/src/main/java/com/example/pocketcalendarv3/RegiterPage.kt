@@ -214,31 +214,66 @@ fun RegisterPageView(modifier: Modifier = Modifier, navController: NavController
 
         FilledTonalButton(
             onClick = {
+                if(username =="")
+                    Toast.makeText(context, "Username can not be null", Toast.LENGTH_SHORT).show()
+                else if(registerEmail=="")
+                    Toast.makeText(context, "Email can not be null", Toast.LENGTH_SHORT).show()
+                else if (registerPassword=="")
+                    Toast.makeText(context, "Password can not be null", Toast.LENGTH_SHORT).show()
+                else{
+                    db.collection("users").whereEqualTo("email", registerEmail)
+                        .get()
+                        .addOnSuccessListener { documents ->
 
-                db.collection("users")
-                    .add(user)
-                    .addOnSuccessListener {
-                        Toast.makeText(context, "Success", Toast.LENGTH_SHORT)
-                            .show()
-                        registerEmail = ""
-                        registerPassword = ""
-                        registerPasswordAgain = ""
-                        username = ""
+                            if (!documents.isEmpty) {
+                                Toast.makeText(context, "Email is taken", Toast.LENGTH_SHORT).show()
 
-                        navController.popBackStack()
-                    }
-                    .addOnFailureListener {
-                        Toast.makeText(
-                            context,
-                            "Something went wrong.",
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
-                        registerEmail = ""
-                        registerPassword = ""
-                        registerPasswordAgain = ""
-                        username = ""
-                    }
+
+                            } else {
+                                if (registerPassword != registerPasswordAgain) {
+                                    registerPasswordAgain = ""
+
+                                    Toast.makeText(
+                                        context,
+                                        "Passwords do not match.",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                } else {
+                                    db.collection("users")
+                                        .add(user)
+                                        .addOnSuccessListener {
+                                            Toast.makeText(context, "Success", Toast.LENGTH_SHORT)
+                                                .show()
+                                            registerEmail = ""
+                                            registerPassword = ""
+                                            registerPasswordAgain = ""
+                                            username = ""
+
+                                            navController.popBackStack()
+                                        }
+                                        .addOnFailureListener {
+                                            Toast.makeText(
+                                                context,
+                                                "Something went wrong.",
+                                                Toast.LENGTH_SHORT
+                                            )
+                                                .show()
+                                            registerEmail = ""
+                                            registerPassword = ""
+                                            registerPasswordAgain = ""
+                                            username = ""
+                                        }
+                                }
+                            }
+
+
+                        }.addOnFailureListener { e ->
+                            Log.w("TAG", "Error reading data", e)
+                        }
+                }
+
+
+
             },
             modifier = Modifier
                 .fillMaxWidth()

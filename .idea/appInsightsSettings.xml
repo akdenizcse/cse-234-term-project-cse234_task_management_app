@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.example.pocketcalendarv3" />
+                  <option name="mobileSdkAppId" value="1:487533948908:android:5fa6d3c7a97fd359fbdac9" />
+                  <option name="projectId" value="pocketcalendarv3" />
+                  <option name="projectNumber" value="487533948908" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
