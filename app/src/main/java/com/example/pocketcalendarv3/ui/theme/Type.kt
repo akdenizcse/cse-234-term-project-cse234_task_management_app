@@ -17,6 +17,12 @@ val provider = GoogleFont.Provider(
 
 val fontName = GoogleFont("Righteous")
 
+
+
+val fontForDate = FontFamily(
+    Font(googleFont = GoogleFont("Poppins"), fontProvider = provider)
+)
+
 val fontFamily = FontFamily(
     Font(googleFont = fontName, fontProvider = provider)
 )
