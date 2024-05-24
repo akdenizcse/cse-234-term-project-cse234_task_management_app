@@ -44,5 +44,8 @@ fun ChangePage(){
         composable(route = "RegisterPage"){
             RegisterPageView(navController = navController)
         }
+        composable(route = "MainPage"){
+            MainPage(navController = navController)
+        }
     }
 }
