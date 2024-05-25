@@ -29,7 +29,7 @@ import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MainPage(navController: NavController , loggedInUserEmail : String?) {
+fun MainPage(navController: NavController, loggedInUserEmail: String?) {
 
     val db = Firebase.firestore
     var username by remember {
@@ -38,7 +38,7 @@ fun MainPage(navController: NavController , loggedInUserEmail : String?) {
     db.collection("users").get().addOnSuccessListener { document ->
         for (doc in document) {
             if (doc.data["email"] == loggedInUserEmail) {
-                 username = doc.data["username"].toString()
+                username = doc.data["username"].toString()
 
             }
         }
@@ -59,10 +59,26 @@ fun MainPage(navController: NavController , loggedInUserEmail : String?) {
             fontWeight = FontWeight.Normal,
             fontFamily = fontForDate
         )
-        Text(text = "Welcome $username" ,
+        Text(
+            text = "Welcome $username,",
             modifier = Modifier.padding(top = 50.dp, start = 16.dp),
             color = Color.Black,
             fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            fontFamily = fontForDate
+        )
+        Text(
+            text = "Have a nice day !",
+            modifier = Modifier.padding(start = 16.dp),
+            color = Color(0xFF474747),
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Normal,
+            fontFamily = fontForDate)
+
+        Text(text = "Long Term Tasks",
+            modifier = Modifier.padding(top = 40.dp, start = 16.dp),
+            color = Color.Black,
+            fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             fontFamily = fontForDate
         )
