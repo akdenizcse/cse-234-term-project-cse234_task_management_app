@@ -28,19 +28,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.pocketcalendarv3.ui.theme.DefaultBlue
+import com.example.pocketcalendarv3.ui.theme.fontForDate
 import androidx.compose.foundation.layout.Arrangement.End as ArrangementEnd
 
 
 @Composable
 fun UserPageView(navController: NavController) {
     NavigationBar(contentColor = Color(0xFFABCEF5)) {
-        Column(
+        Column(modifier = Modifier.background(DefaultBlue).fillMaxSize()
 
         ) {
-            Text(text = "Profile", color = Color.Red, modifier = Modifier.padding(bottom = 215.dp))
+            Text(text = "Profile", color = Color.White, modifier = Modifier.padding(start = 16.dp,top=40.dp),
+                fontFamily = fontForDate, fontSize = 16.sp, fontWeight = FontWeight.SemiBold
+            )
 
             ElevatedButton(
                 onClick = { /*TODO*/ },
