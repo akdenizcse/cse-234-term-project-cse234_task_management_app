@@ -1,6 +1,8 @@
 package com.example.pocketcalendarv3;
 
-import java.lang.reflect.Array;
+import java.sql.Array;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -12,14 +14,14 @@ public class LongTermTask {
 
     private String description;
 
-    private Date startDate;
+    private String startDate;
 
-    private Date endDate;
+    private String endDate;
 
-    private String[] toDoList;
+    private List<String> toDoList;
 
 
-    LongTermTask(String title, String description, Date startDate, Date endDate, String[] toDoList) {
+    LongTermTask(String title, String description, String startDate, String endDate, ArrayList<String> toDoList) {
         this.title = title;
         this.description = description;
         this.startDate = startDate;
@@ -31,15 +33,15 @@ public class LongTermTask {
         return title;
     }
 
-    public Date getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public Date getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public String[] getToDoList() {
+    public List<String> getToDoList() {
         return toDoList;
     }
 
@@ -51,11 +53,11 @@ public class LongTermTask {
         this.description = description;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
@@ -63,7 +65,7 @@ public class LongTermTask {
         this.title = title;
     }
 
-    public void setToDoList(String[] toDoList) {
+    public void setToDoList(List<String> toDoList) {
         this.toDoList = toDoList;
     }
 
@@ -74,7 +76,7 @@ public class LongTermTask {
                 ", description='" + description + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
-                ", toDoList=" + Arrays.toString(toDoList) +
+                ", toDoList=" + toDoList +
                 '}';
     }
 }
