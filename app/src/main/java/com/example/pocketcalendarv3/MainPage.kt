@@ -25,8 +25,11 @@ import androidx.navigation.NavController
 import com.example.pocketcalendarv3.ui.theme.fontForDate
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import java.sql.Array
+import java.sql.Timestamp
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Date
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -55,11 +58,17 @@ fun MainPage(navController: NavController, loggedInUserEmail: String?) {
             if (doc.data["email"] == loggedInUserEmail) {
                 val title = doc.data["title"].toString()
                 if (tasks.none { it.title == title }) {
+                    val toDoList = doc.data["toDoList"] as List<*>
+                        val arrayList = ArrayList<String>()
+                        for (item in toDoList){
+                            arrayList.add(item.toString())
+                        }
+
                     val task = LongTermTask (title, doc.data["description"].toString(),
-                        null, null, null
+                        doc.data["startDate"].toString(), doc.data["endDate"].toString(), arrayList
                     )
                     tasks+=task
-                    println(task.toString())
+                    println(task.toDoList)
                 }
             }
         }
