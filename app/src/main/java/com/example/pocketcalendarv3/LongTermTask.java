@@ -1,5 +1,7 @@
 package com.example.pocketcalendarv3;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -14,10 +16,10 @@ public class LongTermTask {
 
     private Date endDate;
 
-    private List<String> toDoList;
+    private String[] toDoList;
 
 
-    LongTermTask(String title, String description, Date startDate, Date endDate, List<String> toDoList) {
+    LongTermTask(String title, String description, Date startDate, Date endDate, String[] toDoList) {
         this.title = title;
         this.description = description;
         this.startDate = startDate;
@@ -37,7 +39,7 @@ public class LongTermTask {
         return startDate;
     }
 
-    public List<String> getToDoList() {
+    public String[] getToDoList() {
         return toDoList;
     }
 
@@ -61,7 +63,18 @@ public class LongTermTask {
         this.title = title;
     }
 
-    public void setToDoList(List<String> toDoList) {
+    public void setToDoList(String[] toDoList) {
         this.toDoList = toDoList;
+    }
+
+    @Override
+    public String toString() {
+        return "LongTermTask{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", toDoList=" + Arrays.toString(toDoList) +
+                '}';
     }
 }
