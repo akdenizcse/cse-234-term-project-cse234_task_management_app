@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
 fun ChangePage(){
     val navController = rememberNavController()
 
-    NavHost(navController = navController , startDestination = "LoginPage"){
+    NavHost(navController = navController , startDestination = "UserPage"){
         composable(route = "LoginPage"){
             LoginPageView(navController = navController)
         }
