@@ -170,7 +170,7 @@ fun LoginPageView(modifier: Modifier = Modifier, navController: NavController) {
                 for (document in result) {
                     if (document.data["email"] == email && document.data["password"] == password) {
                         bool = false
-                        navController.navigate("MainPage")
+                        navController.navigate("MainPage/${email}")
 
                     }
                 }

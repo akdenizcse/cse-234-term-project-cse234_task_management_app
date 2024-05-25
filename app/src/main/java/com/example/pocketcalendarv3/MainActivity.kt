@@ -1,8 +1,10 @@
 package com.example.pocketcalendarv3
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -15,6 +17,7 @@ import com.example.pocketcalendarv3.ui.theme.PocketCalendarV3Theme
 
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -30,6 +33,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ChangePage(){
     val navController = rememberNavController()
@@ -44,8 +48,9 @@ fun ChangePage(){
         composable(route = "RegisterPage"){
             RegisterPageView(navController = navController)
         }
-        composable(route = "MainPage"){
-            MainPage(navController = navController)
+        composable(route = "MainPage/{loggedInUserEmail}"){ backStackEntry ->
+            val loggedInUserEmail = backStackEntry.arguments?.getString("loggedInUserEmail")
+            MainPage(navController = navController  , loggedInUserEmail = loggedInUserEmail)
         }
     }
 }
