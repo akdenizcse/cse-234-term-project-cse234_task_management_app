@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -27,9 +28,11 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import java.sql.Array
 import java.sql.Timestamp
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Date
+import java.util.concurrent.TimeUnit
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -59,16 +62,16 @@ fun MainPage(navController: NavController, loggedInUserEmail: String?) {
                 val title = doc.data["title"].toString()
                 if (tasks.none { it.title == title }) {
                     val toDoList = doc.data["toDoList"] as List<*>
-                        val arrayList = ArrayList<String>()
-                        for (item in toDoList){
-                            arrayList.add(item.toString())
-                        }
+                    val arrayList = ArrayList<String>()
+                    for (item in toDoList) {
+                        arrayList.add(item.toString())
+                    }
 
-                    val task = LongTermTask (title, doc.data["description"].toString(),
+                    val task = LongTermTask(
+                        title, doc.data["description"].toString(),
                         doc.data["startDate"].toString(), doc.data["endDate"].toString(), arrayList
                     )
-                    tasks+=task
-                    println(task.toDoList)
+                    tasks += task
                 }
             }
         }
@@ -116,12 +119,26 @@ fun MainPage(navController: NavController, loggedInUserEmail: String?) {
         )
 
         LazyRow {
-            items(tasks) {task ->
+            items(tasks) { task ->
                 Card(
-                    modifier = Modifier.padding(16.dp).height(200.dp).width(137.dp),
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .height(200.dp)
+                        .width(137.dp),
 
                     ) {
                     Column {
+                        val date: Date? = SimpleDateFormat("yyyy-MM-dd").parse(task.endDate)
+                        val diffInMillies = date!!.time - System.currentTimeMillis()
+                        val diffInDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS)
+                        Text(
+                            text = diffInDays.toString(),
+                            modifier = Modifier.padding(8.dp).align(Alignment.End),
+                            color = Color(0xFF444444),
+                            fontSize = 10.sp,
+                            fontWeight = FontWeight.Normal,
+                            fontFamily = fontForDate
+                        )
                         Text(
                             text = task.title,
                             modifier = Modifier.padding(8.dp),
@@ -130,14 +147,7 @@ fun MainPage(navController: NavController, loggedInUserEmail: String?) {
                             fontWeight = FontWeight.Bold,
                             fontFamily = fontForDate
                         )
-                        Text(
-                            text = task.description,
-                            modifier = Modifier.padding(8.dp),
-                            color = Color(0xFF474747),
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Normal,
-                            fontFamily = fontForDate
-                        )
+
                     }
                 }
             }
