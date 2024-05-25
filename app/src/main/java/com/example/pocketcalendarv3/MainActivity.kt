@@ -52,5 +52,8 @@ fun ChangePage(){
             val loggedInUserEmail = backStackEntry.arguments?.getString("loggedInUserEmail")
             MainPage(navController = navController  , loggedInUserEmail = loggedInUserEmail)
         }
+        composable(route= "UserPage"){
+            UserPageView(navController=navController)
+        }
     }
 }
