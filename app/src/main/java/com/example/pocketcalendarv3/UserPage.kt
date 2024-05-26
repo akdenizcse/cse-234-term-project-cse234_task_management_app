@@ -30,6 +30,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,14 +44,30 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.pocketcalendarv3.ui.theme.CloudBlue
 import com.example.pocketcalendarv3.ui.theme.DefaultBlue
 import com.example.pocketcalendarv3.ui.theme.fontForDate
 import com.google.android.material.imageview.ShapeableImageView
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 import androidx.compose.foundation.layout.Arrangement.End as ArrangementEnd
 
 
 @Composable
-fun UserPageView(navController: NavController) {
+fun UserPageView(navController: NavController, loggedInUserEmail: String?) {
+    val db = Firebase.firestore
+    var username by remember {
+        mutableStateOf("")
+    }
+    db.collection("users").get().addOnSuccessListener { document ->
+        for (doc in document) {
+            if (doc.data["email"] == loggedInUserEmail) {
+                username = doc.data["username"].toString()
+
+            }
+        }
+    }
+
     NavigationBar(contentColor = Color(0xFFABCEF5)) {
         Column(
             modifier = Modifier
@@ -67,7 +87,9 @@ fun UserPageView(navController: NavController) {
             Column(
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(color = Color.White)
             ) {
 
 
@@ -75,12 +97,16 @@ fun UserPageView(navController: NavController) {
                     painter = painterResource(id = R.drawable.ic_launcher_foreground),
                     contentDescription = "User Profile",
                     modifier = Modifier
+                        .background(DefaultBlue)
                         .size(100.dp)
                         .clip(CircleShape)
                         .aspectRatio(1f)
                         .border(0.dp, Color.White, CircleShape)
                 )
-
+                Text(text = username, modifier = Modifier
+                    .padding(top = 7.dp)
+                    .size(16.dp), DefaultBlue)
+Text(text = "Student", modifier = Modifier, color = Color.Black)
             }
 
             ElevatedButton(
@@ -134,7 +160,9 @@ fun UserPageView(navController: NavController) {
                 Text(
                     text = "Logout", color = Color.Red, modifier = Modifier.padding(start = 16.dp)
                 )
+            }
 
+            Column(modifier = Modifier.size(250.dp)) {
 
             }
 
@@ -144,26 +172,28 @@ fun UserPageView(navController: NavController) {
                 modifier = Modifier.run {
                     fillMaxWidth()
                         .height(198.dp)
-                        .background(color = Color.Red)
+                        .background(color = Color.White)
+
                 },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     Icons.Filled.Home,
                     contentDescription = "",
-                    modifier = Modifier.size(50.dp)
+                    modifier = Modifier.size(50.dp),
 
 
-                )
+                    )
                 Icon(
                     Icons.Filled.Add,
                     contentDescription = "",
-                    modifier = Modifier.size(50.dp)
+                    modifier = Modifier.size(50.dp),
 
 
-                )
+                    )
                 Icon(
-                    Icons.Filled.Person, contentDescription = "", modifier = Modifier.size(50.dp)
+                    Icons.Filled.Person, contentDescription = "", modifier = Modifier.size(50.dp),
+                    DefaultBlue
 
                 )
 
