@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Security
+import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material.icons.filled.StackedBarChart
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.ElevatedButton
@@ -38,6 +39,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Black
+import androidx.compose.ui.graphics.Color.Companion.Red
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -71,19 +75,23 @@ fun UserPageView(navController: NavController, loggedInUserEmail: String?) {
     NavigationBar(contentColor = Color(0xFFABCEF5)) {
         Column(
             modifier = Modifier
-                .background(DefaultBlue)
+                .background(color = White)
                 .fillMaxSize()
 
         ) {
-            Text(
-                text = "Profile",
-                color = Color.White,
-                modifier = Modifier.padding(start = 16.dp, top = 40.dp),
-                fontFamily = fontForDate,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold
-            )
-            Spacer(modifier = Modifier.height(32.dp))
+            Row (modifier = Modifier
+                .background(DefaultBlue)
+                .fillMaxWidth()
+                .padding(bottom = 25.dp)){
+                Text(
+                    text = "Profile",
+                    color = Color.White,
+                    modifier = Modifier.padding(start = 16.dp, top = 40.dp),
+                    fontFamily = fontForDate,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
             Column(
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -94,20 +102,39 @@ fun UserPageView(navController: NavController, loggedInUserEmail: String?) {
 
 
                 Image(
-                    painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                    painter = painterResource(id = R.drawable.user
+                    ),
                     contentDescription = "User Profile",
                     modifier = Modifier
-                        .background(DefaultBlue)
                         .size(100.dp)
                         .clip(CircleShape)
                         .aspectRatio(1f)
                         .border(0.dp, Color.White, CircleShape)
                 )
-                Text(text = username, modifier = Modifier
-                    .padding(top = 7.dp)
-                    .size(16.dp), DefaultBlue)
-Text(text = "Student", modifier = Modifier, color = Color.Black)
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    text = username, modifier = Modifier
+                        .padding(top = 7.dp), DefaultBlue, fontSize = 16.sp
+                )
+                Spacer(modifier = Modifier.height(3.dp))
+
+                Text(text = "Student", modifier = Modifier, color = Color.Black)
+                Spacer(modifier = Modifier.height(22.dp))
+
+                Row {
+                    Icon(Icons.Filled.ShoppingBag, contentDescription = "", modifier = Modifier.size(20.dp),
+                        DefaultBlue)
+                    Text(text = "... Task Completed", color = Black, modifier =  Modifier, fontSize = 15.sp)
+
+
+                }
+
+
             }
+            Spacer(modifier = Modifier.height(40.dp))
+Column (modifier = Modifier.background(color = White)){
+
 
             ElevatedButton(
                 onClick = { /*TODO*/ },
@@ -118,7 +145,7 @@ Text(text = "Student", modifier = Modifier, color = Color.Black)
 
                 Text(
                     text = "My Profile",
-                    color = Color.Red,
+                    color = Black,
                     modifier = Modifier.padding(start = 16.dp)
 
                 )
@@ -133,7 +160,7 @@ Text(text = "Student", modifier = Modifier, color = Color.Black)
 
                 Text(
                     text = "Statistic",
-                    color = Color.Red,
+                    color = Black,
                     modifier = Modifier.padding(start = 16.dp)
                 )
 
@@ -147,7 +174,7 @@ Text(text = "Student", modifier = Modifier, color = Color.Black)
 
                 Text(
                     text = "Security",
-                    color = Color.Red,
+                    color = Black,
                     modifier = Modifier.padding(start = 16.dp)
 
                 )
@@ -158,11 +185,11 @@ Text(text = "Student", modifier = Modifier, color = Color.Black)
 
                 Icon(Icons.Filled.Logout, contentDescription = "")
                 Text(
-                    text = "Logout", color = Color.Red, modifier = Modifier.padding(start = 16.dp)
+                    text = "Logout", color = Black, modifier = Modifier.padding(start = 16.dp)
                 )
             }
 
-            Column(modifier = Modifier.size(250.dp)) {
+            Column(modifier = Modifier.size(155.dp)) {
 
             }
 
@@ -171,33 +198,40 @@ Text(text = "Student", modifier = Modifier, color = Color.Black)
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier.run {
                     fillMaxWidth()
-                        .height(198.dp)
+                        .height(175.dp)
                         .background(color = Color.White)
 
                 },
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    Icons.Filled.Home,
-                    contentDescription = "",
-                    modifier = Modifier.size(50.dp),
+               ElevatedButton(onClick = { /*TODO*/ }) {
+                   Icon(
+                       Icons.Filled.Home,
+                       contentDescription = "",
+                       modifier = Modifier.size(50.dp),
 
 
-                    )
-                Icon(
+                       )
+               }
+                ElevatedButton(onClick = { /*TODO*/ }) { Icon(
                     Icons.Filled.Add,
                     contentDescription = "",
                     modifier = Modifier.size(50.dp),
 
 
                     )
-                Icon(
-                    Icons.Filled.Person, contentDescription = "", modifier = Modifier.size(50.dp),
-                    DefaultBlue
 
-                )
+                }
+ElevatedButton(onClick = { /*TODO*/ }) {
+    Icon(
+        Icons.Filled.Person, contentDescription = "", modifier = Modifier.size(50.dp),
+        DefaultBlue
+
+    )
 
 
+}
+            }
             }
 
 
