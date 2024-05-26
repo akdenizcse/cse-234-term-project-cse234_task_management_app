@@ -85,8 +85,12 @@ fun MainPage(navController: NavController, loggedInUserEmail: String?) {
                     }
 
                     val task = LongTermTask(
-                        title, doc.data["description"].toString(),
-                        doc.data["startDate"].toString(), doc.data["endDate"].toString(), arrayList , doc.data["color"].toString()
+                        title,
+                        doc.data["description"].toString(),
+                        doc.data["startDate"].toString(),
+                        doc.data["endDate"].toString(),
+                        arrayList,
+                        doc.data["color"].toString()
                     )
                     tasks += task
                 }
@@ -137,7 +141,8 @@ fun MainPage(navController: NavController, loggedInUserEmail: String?) {
 
         LazyRow {
             items(tasks) { task ->
-//                val color = Color(android.graphics.Color.parseColor("FFD1DFF6"))
+
+                val color = "#${task.color}".toColor()
                 Card(
                     modifier = Modifier
                         .padding(16.dp)
@@ -145,8 +150,12 @@ fun MainPage(navController: NavController, loggedInUserEmail: String?) {
                         .width(137.dp),
 
                     ) {
-                    Column(modifier = Modifier.fillMaxSize()) {
-                        
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(color)
+                    ) {
+
                         val date: Date? = SimpleDateFormat("yyyy-MM-dd").parse(task.endDate)
                         val diffInMillies = date!!.time - System.currentTimeMillis()
                         val diffInDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS)
@@ -177,15 +186,25 @@ fun MainPage(navController: NavController, loggedInUserEmail: String?) {
                             fontFamily = fontForDate,
                             textAlign = TextAlign.Center
                         )
+                        Column {
+                            Text(
+                                text = "Progress",
+                                modifier = Modifier.padding(8.dp),
+                                color = Color.White,
+                                fontSize = 10.sp,
+                                fontWeight = FontWeight.Normal,
+                                fontFamily = fontForDate
+                            )
 
+                            LinearProgressIndicator(
+                                progress = 0.5f,
+                                color = Color(0xFF004797),
+                                modifier = Modifier.padding(8.dp),
+                                strokeCap = StrokeCap.Round,
+                                trackColor = TextFieldGray
+                            )
+                        }
 
-                        LinearProgressIndicator(
-                            progress = 0.5f,
-                            color = Color(0xFF004797),
-                            modifier = Modifier.padding(8.dp),
-                            strokeCap = StrokeCap.Round,
-                            trackColor = TextFieldGray
-                        )
 
                     }
                 }
@@ -193,4 +212,6 @@ fun MainPage(navController: NavController, loggedInUserEmail: String?) {
         }
     }
 }
+
+fun String.toColor() = Color(android.graphics.Color.parseColor(this))
 
