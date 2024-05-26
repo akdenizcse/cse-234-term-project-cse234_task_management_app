@@ -5,20 +5,18 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.LinearProgressIndicator
@@ -39,14 +37,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.pocketcalendarv3.ui.theme.DefaultBlue
-import com.example.pocketcalendarv3.ui.theme.SoftBlue
 import com.example.pocketcalendarv3.ui.theme.TextFieldGray
 import com.example.pocketcalendarv3.ui.theme.fontForDate
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
-import java.sql.Array
-import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -155,7 +149,8 @@ fun MainPage(navController: NavController, loggedInUserEmail: String?) {
                     modifier = Modifier
                         .padding(16.dp)
                         .height(200.dp)
-                        .width(137.dp),
+                        .width(137.dp)
+                        .clickable { navController.navigate("DetailPriorityTask") },
 
                     ) {
                     Column(
