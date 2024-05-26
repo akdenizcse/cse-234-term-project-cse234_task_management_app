@@ -102,7 +102,7 @@ fun UserPageView(navController: NavController, loggedInUserEmail: String?) {
 
 
                 Image(
-                    painter = painterResource(id = R.drawable.user
+                    painter = painterResource(id = R.drawable.ic_launcher_foreground
                     ),
                     contentDescription = "User Profile",
                     modifier = Modifier
