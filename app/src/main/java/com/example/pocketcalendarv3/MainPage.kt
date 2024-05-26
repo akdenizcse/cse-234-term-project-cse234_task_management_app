@@ -5,16 +5,20 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.LinearProgressIndicator
@@ -35,10 +39,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.pocketcalendarv3.ui.theme.DefaultBlue
+import com.example.pocketcalendarv3.ui.theme.SoftBlue
 import com.example.pocketcalendarv3.ui.theme.TextFieldGray
 import com.example.pocketcalendarv3.ui.theme.fontForDate
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import java.sql.Array
+import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -77,6 +85,11 @@ fun MainPage(navController: NavController, loggedInUserEmail: String?) {
                     for (item in toDoList) {
                         arrayList.add(item.toString())
                     }
+                    val toDoListChecked = doc.data["toDoListChecked"] as List<*>
+                    val arrayListChecked = ArrayList<String>()
+                    for (item in toDoListChecked) {
+                        arrayListChecked.add(item.toString())
+                    }
 
                     val task = LongTermTask(
                         title,
@@ -84,7 +97,8 @@ fun MainPage(navController: NavController, loggedInUserEmail: String?) {
                         doc.data["startDate"].toString(),
                         doc.data["endDate"].toString(),
                         arrayList,
-                        doc.data["color"].toString()
+                        doc.data["color"].toString(),
+                        arrayListChecked
                     )
                     tasks += task
                 }
@@ -141,8 +155,7 @@ fun MainPage(navController: NavController, loggedInUserEmail: String?) {
                     modifier = Modifier
                         .padding(16.dp)
                         .height(200.dp)
-                        .width(137.dp)
-                        .clickable {navController.navigate("DetailPriorityTask") },
+                        .width(137.dp),
 
                     ) {
                     Column(
@@ -155,6 +168,7 @@ fun MainPage(navController: NavController, loggedInUserEmail: String?) {
                         val diffInMillies = date!!.time - System.currentTimeMillis()
                         val diffInDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS)
 
+                        var progress = task.progress
 
                         Text(
                             text = diffInDays.toString() + " days",
@@ -184,20 +198,35 @@ fun MainPage(navController: NavController, loggedInUserEmail: String?) {
                         Column {
                             Text(
                                 text = "Progress",
-                                modifier = Modifier.padding(8.dp),
-                                color = Color.White,
+                                modifier = Modifier.padding(start = 8.dp),
+                                color = Color.Black,
                                 fontSize = 10.sp,
                                 fontWeight = FontWeight.Normal,
                                 fontFamily = fontForDate
                             )
 
                             LinearProgressIndicator(
-                                progress = 0.5f,
+                                progress = progress,
                                 color = Color(0xFF004797),
-                                modifier = Modifier.padding(8.dp),
+                                modifier = Modifier.padding(start = 8.dp, end = 8.dp),
                                 strokeCap = StrokeCap.Round,
                                 trackColor = TextFieldGray
                             )
+                            Row (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End){
+                                Text(
+
+                                    text = String.format("%.1f", progress * 100) + "%",
+                                    color = Color.Black,
+                                    modifier = Modifier.padding(start = 8.dp, end = 8.dp),
+                                    fontSize = 10.sp,
+                                    fontWeight = FontWeight.Normal,
+                                    fontFamily = fontForDate,
+
+                                )
+                            }
+
+
+
                         }
 
 
