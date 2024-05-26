@@ -30,6 +30,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,14 +44,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.pocketcalendarv3.ui.theme.CloudBlue
 import com.example.pocketcalendarv3.ui.theme.DefaultBlue
 import com.example.pocketcalendarv3.ui.theme.fontForDate
 import com.google.android.material.imageview.ShapeableImageView
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 import androidx.compose.foundation.layout.Arrangement.End as ArrangementEnd
 
 
 @Composable
 fun UserPageView(navController: NavController) {
+
     NavigationBar(contentColor = Color(0xFFABCEF5)) {
         Column(
             modifier = Modifier
@@ -69,6 +77,7 @@ fun UserPageView(navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxWidth()
             ) {
+
 
 
                 Image(
@@ -134,7 +143,9 @@ fun UserPageView(navController: NavController) {
                 Text(
                     text = "Logout", color = Color.Red, modifier = Modifier.padding(start = 16.dp)
                 )
+            }
 
+            Column(modifier = Modifier.size(250.dp)) {
 
             }
 
@@ -144,26 +155,32 @@ fun UserPageView(navController: NavController) {
                 modifier = Modifier.run {
                     fillMaxWidth()
                         .height(198.dp)
-                        .background(color = Color.Red)
+                        .background(color = Color.White)
+
                 },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     Icons.Filled.Home,
                     contentDescription = "",
-                    modifier = Modifier.size(50.dp)
+                    modifier = Modifier.size(50.dp),
+
+
 
 
                 )
                 Icon(
                     Icons.Filled.Add,
                     contentDescription = "",
-                    modifier = Modifier.size(50.dp)
+                    modifier = Modifier.size(50.dp),
+
+
 
 
                 )
                 Icon(
-                    Icons.Filled.Person, contentDescription = "", modifier = Modifier.size(50.dp)
+                    Icons.Filled.Person, contentDescription = "", modifier = Modifier.size(50.dp),
+                    DefaultBlue
 
                 )
 
