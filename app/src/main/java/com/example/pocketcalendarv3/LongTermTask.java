@@ -20,13 +20,14 @@ public class LongTermTask {
 
     private List<String> toDoList;
 
-
-    LongTermTask(String title, String description, String startDate, String endDate, ArrayList<String> toDoList) {
+    private String color;
+    LongTermTask(String title, String description, String startDate, String endDate, ArrayList<String> toDoList , String Color) {
         this.title = title;
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
         this.toDoList = toDoList;
+        this.color = Color;
     }
 
     public String getTitle() {
@@ -69,14 +70,12 @@ public class LongTermTask {
         this.toDoList = toDoList;
     }
 
-    @Override
-    public String toString() {
-        return "LongTermTask{" +
-                "title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", toDoList=" + toDoList +
-                '}';
+    public String getColor() {
+        return color;
     }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
 }
