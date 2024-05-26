@@ -20,13 +20,19 @@ public class LongTermTask {
 
     private List<String> toDoList;
 
+    private List<String> toDoListChecked;
 
-    LongTermTask(String title, String description, String startDate, String endDate, ArrayList<String> toDoList) {
+    private String color;
+
+
+    LongTermTask(String title, String description, String startDate, String endDate, ArrayList<String> toDoList , String Color , ArrayList<String> toDoListChecked) {
         this.title = title;
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
         this.toDoList = toDoList;
+        this.color = Color;
+        this.toDoListChecked = toDoListChecked;
     }
 
     public String getTitle() {
@@ -69,14 +75,28 @@ public class LongTermTask {
         this.toDoList = toDoList;
     }
 
-    @Override
-    public String toString() {
-        return "LongTermTask{" +
-                "title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", toDoList=" + toDoList +
-                '}';
+    public List<String> getToDoListChecked() {
+        return toDoListChecked;
     }
+
+    public void setToDoListChecked(List<String> toDoListChecked) {
+        this.toDoListChecked = toDoListChecked;
+    }
+
+    public Float getProgress() {
+        int checked = toDoListChecked.size();
+         int total = toDoList.size()+checked;
+         return (float)checked/total;
+        }
+
+
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
 }
