@@ -15,12 +15,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
@@ -154,7 +157,7 @@ fun LoginPageView(modifier: Modifier = Modifier, navController: NavController) {
 
             )
         TextButton(
-            onClick = {navController.navigate("ForgotYourPasswordPage") },
+            onClick = { navController.navigate("ForgotYourPasswordPage") },
             modifier = Modifier
                 .align(Alignment.Start)
                 .padding(horizontal = 12.dp)
@@ -165,28 +168,29 @@ fun LoginPageView(modifier: Modifier = Modifier, navController: NavController) {
             onClick = {
 
 
-            db.collection("users").get().addOnSuccessListener { result ->
-                var bool = true
-                for (document in result) {
-                    if (document.data["email"] == email && document.data["password"] == password) {
-                        bool = false
-                        navController.navigate("MainPage/${email}")
+                db.collection("users").get().addOnSuccessListener { result ->
+                    var bool = true
+                    for (document in result) {
+                        if (document.data["email"] == email && document.data["password"] == password) {
+                            bool = false
+                            navController.navigate("MainPage/${email}")
 
+                        }
                     }
+                    if (bool) {
+                        Toast.makeText(
+                            context,
+                            "Email or password is incorrect",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        email = ""
+                        password = ""
+                    }
+
+
+                }.addOnFailureListener { exception ->
+                    println("Error getting documents: $exception")
                 }
-                if (bool) {
-                    Toast.makeText(context, "Email or password is incorrect", Toast.LENGTH_SHORT).show()
-                    email = ""
-                    password = ""
-                }
-
-
-            }.addOnFailureListener { exception ->
-                println("Error getting documents: $exception")}
-
-
-
-
 
 
             },
@@ -214,6 +218,13 @@ fun LoginPageView(modifier: Modifier = Modifier, navController: NavController) {
             }
         }
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+
+
+            /*Button(
+                onClick = { navController.navigate("UserPage/${email}") }, modifier = Modifier.size(45.dp)
+            ) {
+
+            }*/
             Image(
                 painter = painterResource(id = R.drawable.logo_foreground),
                 contentDescription = "",
@@ -221,6 +232,7 @@ fun LoginPageView(modifier: Modifier = Modifier, navController: NavController) {
                 modifier = Modifier.clip(CircleShape)
             )
         }
+
 
 
     }

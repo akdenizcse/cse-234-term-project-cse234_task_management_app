@@ -54,7 +54,19 @@ import androidx.compose.foundation.layout.Arrangement.End as ArrangementEnd
 
 
 @Composable
-fun UserPageView(navController: NavController) {
+fun UserPageView(navController: NavController, loggedInUserEmail: String?) {
+    val db = Firebase.firestore
+    var username by remember {
+        mutableStateOf("")
+    }
+    db.collection("users").get().addOnSuccessListener { document ->
+        for (doc in document) {
+            if (doc.data["email"] == loggedInUserEmail) {
+                username = doc.data["username"].toString()
+
+            }
+        }
+    }
 
     NavigationBar(contentColor = Color(0xFFABCEF5)) {
         Column(
@@ -79,7 +91,6 @@ fun UserPageView(navController: NavController) {
             ) {
 
 
-
                 Image(
                     painter = painterResource(id = R.drawable.ic_launcher_foreground),
                     contentDescription = "User Profile",
@@ -89,6 +100,7 @@ fun UserPageView(navController: NavController) {
                         .aspectRatio(1f)
                         .border(0.dp, Color.White, CircleShape)
                 )
+                Text(text = username)
 
             }
 
@@ -166,18 +178,14 @@ fun UserPageView(navController: NavController) {
                     modifier = Modifier.size(50.dp),
 
 
-
-
-                )
+                    )
                 Icon(
                     Icons.Filled.Add,
                     contentDescription = "",
                     modifier = Modifier.size(50.dp),
 
 
-
-
-                )
+                    )
                 Icon(
                     Icons.Filled.Person, contentDescription = "", modifier = Modifier.size(50.dp),
                     DefaultBlue

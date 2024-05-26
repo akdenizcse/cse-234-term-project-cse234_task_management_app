@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
 fun ChangePage(){
     val navController = rememberNavController()
 
-    NavHost(navController = navController , startDestination = "UserPage"){
+    NavHost(navController = navController , startDestination = "LoginPage"){
         composable(route = "LoginPage"){
             LoginPageView(navController = navController)
         }
@@ -52,8 +52,9 @@ fun ChangePage(){
             val loggedInUserEmail = backStackEntry.arguments?.getString("loggedInUserEmail")
             MainPage(navController = navController  , loggedInUserEmail = loggedInUserEmail)
         }
-        composable(route= "UserPage"){
-            UserPageView(navController=navController)
+        composable(route= "UserPage/{loggedInUserEmail}"){ backStackEntry ->
+            val loggedInUserEmail = backStackEntry.arguments?.getString("loggedInUserEmail")
+            UserPageView(navController=navController, loggedInUserEmail)
         }
     }
 }
