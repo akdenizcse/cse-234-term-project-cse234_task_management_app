@@ -87,7 +87,9 @@ fun UserPageView(navController: NavController, loggedInUserEmail: String?) {
             Column(
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(color = Color.White)
             ) {
 
 
@@ -95,13 +97,16 @@ fun UserPageView(navController: NavController, loggedInUserEmail: String?) {
                     painter = painterResource(id = R.drawable.ic_launcher_foreground),
                     contentDescription = "User Profile",
                     modifier = Modifier
+                        .background(DefaultBlue)
                         .size(100.dp)
                         .clip(CircleShape)
                         .aspectRatio(1f)
                         .border(0.dp, Color.White, CircleShape)
                 )
-                Text(text = username)
-
+                Text(text = username, modifier = Modifier
+                    .padding(top = 7.dp)
+                    .size(16.dp), DefaultBlue)
+Text(text = "Student", modifier = Modifier, color = Color.Black)
             }
 
             ElevatedButton(
