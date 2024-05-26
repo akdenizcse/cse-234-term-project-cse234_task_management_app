@@ -199,7 +199,7 @@ fun MainPage(navController: NavController, loggedInUserEmail: String?) {
                             Text(
                                 text = "Progress",
                                 modifier = Modifier.padding(start = 8.dp),
-                                color = Color.White,
+                                color = Color.Black,
                                 fontSize = 10.sp,
                                 fontWeight = FontWeight.Normal,
                                 fontFamily = fontForDate
@@ -216,7 +216,7 @@ fun MainPage(navController: NavController, loggedInUserEmail: String?) {
                                 Text(
 
                                     text = String.format("%.1f", progress * 100) + "%",
-                                    color = Color.White,
+                                    color = Color.Black,
                                     modifier = Modifier.padding(start = 8.dp, end = 8.dp),
                                     fontSize = 10.sp,
                                     fontWeight = FontWeight.Normal,
