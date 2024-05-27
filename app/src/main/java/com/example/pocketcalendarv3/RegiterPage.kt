@@ -86,7 +86,9 @@ fun RegisterPageView(modifier: Modifier = Modifier, navController: NavController
 
     Row(modifier = Modifier.height(32.dp)) {
         IconButton(onClick = { navController.popBackStack() }) {
-            Icon(Icons.Filled.ArrowBack, contentDescription = "")
+            Icon(Icons.Filled.ArrowBack, contentDescription = "",
+                tint = DefaultBlue
+            )
         }
     }
 

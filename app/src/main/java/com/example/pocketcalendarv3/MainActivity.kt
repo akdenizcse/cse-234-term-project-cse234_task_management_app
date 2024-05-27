@@ -57,8 +57,10 @@ fun ChangePage(){
             UserPageView(navController=navController, loggedInUserEmail)
         }
         composable(route="DetailPriorityTask"){
-            DetailPriorityTask(navController=navController
-            )
+            DetailPriorityTask(navController = navController)
+        }
+        composable(route = "EditPriorityTask"){
+            EditPriorityTask(navController = navController)
         }
     }
 }
