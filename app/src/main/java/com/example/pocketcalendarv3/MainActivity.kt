@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
 fun ChangePage(){
     val navController = rememberNavController()
 
-    NavHost(navController = navController , startDestination = "LoginPage"){
+    NavHost(navController = navController , startDestination = "ChangePasswordPageView"){
         composable(route = "LoginPage"){
             LoginPageView(navController = navController)
         }
@@ -61,6 +61,9 @@ fun ChangePage(){
         }
         composable(route = "EditPriorityTask"){
             EditPriorityTask(navController = navController)
+        }
+        composable(route = "ChangePasswordPageView"){
+            ChangePasswordPageView(navController = navController)
         }
     }
 }
