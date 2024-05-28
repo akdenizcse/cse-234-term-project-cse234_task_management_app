@@ -46,6 +46,8 @@ import com.google.firebase.firestore.firestore
 
 @Composable
 fun ChangePasswordPageView(modifier: Modifier = Modifier, navController: NavController) {
+
+
     val db = Firebase.firestore
 
     val context = LocalContext.current
