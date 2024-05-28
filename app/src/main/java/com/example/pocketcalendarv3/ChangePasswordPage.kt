@@ -1,5 +1,6 @@
 package com.example.pocketcalendarv3
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -45,7 +46,11 @@ import com.google.firebase.firestore.firestore
 
 
 @Composable
-fun ChangePasswordPageView(modifier: Modifier = Modifier, navController: NavController) {
+fun ChangePasswordPageView(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    loggedInUserEmail: String?
+) {
 
 
     val db = Firebase.firestore
@@ -120,7 +125,13 @@ fun ChangePasswordPageView(modifier: Modifier = Modifier, navController: NavCont
 
 
                 label = { Text(text = "Current Password", color = TextFieldGray) },
-                leadingIcon = { Icon(Icons.Filled.Lock, contentDescription = "", tint = DefaultBlue) },
+                leadingIcon = {
+                    Icon(
+                        Icons.Filled.Lock,
+                        contentDescription = "",
+                        tint = DefaultBlue
+                    )
+                },
 
 
                 )
@@ -139,7 +150,13 @@ fun ChangePasswordPageView(modifier: Modifier = Modifier, navController: NavCont
 
 
                 label = { Text(text = "New Password", color = TextFieldGray) },
-                leadingIcon = { Icon(Icons.Filled.Lock, contentDescription = "", tint = DefaultBlue) },
+                leadingIcon = {
+                    Icon(
+                        Icons.Filled.Lock,
+                        contentDescription = "",
+                        tint = DefaultBlue
+                    )
+                },
 
 
                 )
@@ -158,7 +175,13 @@ fun ChangePasswordPageView(modifier: Modifier = Modifier, navController: NavCont
 
 
                 label = { Text(text = "Confirm New Password", color = TextFieldGray) },
-                leadingIcon = { Icon(Icons.Filled.Lock, contentDescription = "", tint = DefaultBlue) },
+                leadingIcon = {
+                    Icon(
+                        Icons.Filled.Lock,
+                        contentDescription = "",
+                        tint = DefaultBlue
+                    )
+                },
 
 
                 )
@@ -170,22 +193,41 @@ fun ChangePasswordPageView(modifier: Modifier = Modifier, navController: NavCont
 
             Spacer(modifier = Modifier.height(25.dp))
             Button(
-                onClick = { /*TODO*/ },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp).size(50.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = DefaultBlue,
-                    contentColor = Color.White
-                )
-            ) {
-                Text(text = "Submit")
-            }
+                onClick = {
+
+                    db.collection("users").whereEqualTo("email", loggedInUserEmail).get()
+                        .addOnSuccessListener { documents ->
+                            for (document in documents) {
+                                val password = document.getString("password")
+                                if (password == currentPassword && newPassword == confirmNewPassword) {
+                                    db.collection("users").document(document.id).update("password", newPassword)
+                                        .addOnSuccessListener {
+                                            navController.popBackStack()
+                                        }
+                                }
+                                else {
+                                    Toast.makeText(context, "Something went wrong.", Toast.LENGTH_SHORT).show()
+                                    }
+                            }
+
+
+                        }
+                          },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .size(50.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = DefaultBlue,
+                        contentColor = Color.White
+                    )
+                    ) {
+                    Text(text = "Submit")
+                }
+                }
+
+
         }
 
 
-
     }
-
-
-}

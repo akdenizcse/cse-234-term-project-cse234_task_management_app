@@ -44,7 +44,7 @@ import com.example.pocketcalendarv3.ui.theme.DefaultBlue
 import com.example.pocketcalendarv3.ui.theme.fontForDate
 
 @Composable
-fun EditPriorityTask(modifier: Modifier = Modifier, navController: NavController) {
+fun EditPriorityTask(modifier: Modifier = Modifier, navController: NavController , loggedInUserEmail: String?) {
 
     var name by remember {
         mutableStateOf("")

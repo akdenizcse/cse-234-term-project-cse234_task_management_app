@@ -167,12 +167,13 @@ fun MainPage(navController: NavController, loggedInUserEmail: String?) {
                 items(tasks) { task ->
 
                     val color = "#${task.color}".toColor()
+                    val title = task.title
                     Card(
                         modifier = Modifier
                             .padding(16.dp)
                             .height(200.dp)
                             .width(137.dp)
-                            .clickable { navController.navigate("DetailPriorityTask") },
+                            .clickable { navController.navigate("DetailPriorityTask/$loggedInUserEmail/$title") },
 
                         ) {
                         Column(
@@ -373,7 +374,7 @@ fun MainPage(navController: NavController, loggedInUserEmail: String?) {
                         Icon(Icons.Rounded.Add, contentDescription = "",modifier = Modifier
                             .scale(1.8f))
                     }
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = { navController.navigate("UserPage/$loggedInUserEmail}") }) {
                         Icon(Icons.Rounded.Person, contentDescription = "",modifier = Modifier.scale(1.8f))
                     }
                 }

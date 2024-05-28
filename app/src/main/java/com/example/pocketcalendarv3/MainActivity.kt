@@ -23,8 +23,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             PocketCalendarV3Theme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
                     ChangePage()
                 }
@@ -35,35 +34,41 @@ class MainActivity : ComponentActivity() {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ChangePage(){
+fun ChangePage() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController , startDestination = "ChangePasswordPageView"){
-        composable(route = "LoginPage"){
+    NavHost(navController = navController, startDestination = "LoginPage") {
+        composable(route = "LoginPage") {
             LoginPageView(navController = navController)
         }
-        composable(route = "ForgotYourPasswordPage"){
+        composable(route = "ForgotYourPasswordPage") {
             ForgetYourPasswordView(navController = navController)
         }
-        composable(route = "RegisterPage"){
+        composable(route = "RegisterPage") {
             RegisterPageView(navController = navController)
         }
-        composable(route = "MainPage/{loggedInUserEmail}"){ backStackEntry ->
+        composable(route = "MainPage/{loggedInUserEmail}") { backStackEntry ->
             val loggedInUserEmail = backStackEntry.arguments?.getString("loggedInUserEmail")
-            MainPage(navController = navController  , loggedInUserEmail = loggedInUserEmail)
+            MainPage(navController = navController, loggedInUserEmail = loggedInUserEmail)
         }
-        composable(route= "UserPage/{loggedInUserEmail}"){ backStackEntry ->
+        composable(route = "UserPage/{loggedInUserEmail}") { backStackEntry ->
             val loggedInUserEmail = backStackEntry.arguments?.getString("loggedInUserEmail")
-            UserPageView(navController=navController, loggedInUserEmail)
+            UserPageView(navController = navController, loggedInUserEmail = loggedInUserEmail)
         }
-        composable(route="DetailPriorityTask"){
-            DetailPriorityTask(navController = navController)
+        composable(route = "DetailPriorityTask/{loggedInUserEmail}/{title}") { backStackEntry ->
+            val loggedInUserEmail = backStackEntry.arguments?.getString("loggedInUserEmail")
+            val title = backStackEntry.arguments?.getString("title")
+            DetailPriorityTask(navController = navController, loggedInUserEmail = loggedInUserEmail , title = title)
         }
-        composable(route = "EditPriorityTask"){
-            EditPriorityTask(navController = navController)
+        composable(route = "EditPriorityTask/{loggedInUserEmail}") { backStackEntry ->
+            val loggedInUserEmail = backStackEntry.arguments?.getString("loggedInUserEmail")
+            EditPriorityTask(navController = navController, loggedInUserEmail = loggedInUserEmail)
         }
-        composable(route = "ChangePasswordPageView"){
-            ChangePasswordPageView(navController = navController)
+        composable(route = "ChangePasswordPage/{loggedInUserEmail}") { backStackEntry ->
+            val loggedInUserEmail = backStackEntry.arguments?.getString("loggedInUserEmail")
+            ChangePasswordPageView(
+                navController = navController, loggedInUserEmail = loggedInUserEmail
+            )
         }
     }
 }
