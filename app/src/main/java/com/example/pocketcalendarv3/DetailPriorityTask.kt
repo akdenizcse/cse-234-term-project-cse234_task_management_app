@@ -1,5 +1,6 @@
 package com.example.pocketcalendarv3
 
+import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -14,8 +15,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -23,12 +26,16 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -48,11 +55,14 @@ import com.example.pocketcalendarv3.ui.theme.DefaultBlue
 import com.example.pocketcalendarv3.ui.theme.TextFieldGray
 import com.example.pocketcalendarv3.ui.theme.fontForDate
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
+
+@SuppressLint("SimpleDateFormat")
 @Composable
 fun DetailPriorityTask(
     modifier: Modifier = Modifier,
@@ -64,10 +74,30 @@ fun DetailPriorityTask(
     val db = Firebase.firestore
     val context = LocalContext.current
 
-    var start by remember { mutableStateOf("") }
-    var end by remember { mutableStateOf("") }
-    val arrayList = ArrayList<String>()
-    val arrayListChecked = ArrayList<String>()
+    var task by remember {
+        mutableStateOf(
+            LongTermTask(
+                "",
+                "",
+                "",
+                "",
+                ArrayList(),
+                "",
+                ArrayList()
+            )
+        )
+    }
+
+
+    var outputDateStrStart by remember { mutableStateOf("") }
+    var outputDateStrEnd by remember { mutableStateOf("") }
+
+    var months by remember { mutableIntStateOf(0) }
+    var days by remember { mutableIntStateOf(0) }
+    var hours by remember { mutableIntStateOf(0) }
+
+
+    var progress by remember { mutableFloatStateOf(0.0f) }
 
 
 
@@ -75,21 +105,65 @@ fun DetailPriorityTask(
     db.collection("longterm").whereEqualTo("title", title).whereEqualTo("email", loggedInUserEmail)
         .get().addOnSuccessListener {
             for (document in it) {
-                start = document.getString("startDate").toString()
-                end = document.getString("endDate").toString()
-                val toDoList = document.data["toDoList"] as List<*>
+                val arrayList = ArrayList<String>()
+                val arrayListChecked = ArrayList<String>()
 
-                for (item in toDoList) {
-                    arrayList.add(item.toString())
-                }
+
+                val start = document.getString("startDate").toString()
+                val end = document.getString("endDate").toString()
+                val description = document.getString("description").toString()
+
+
                 val toDoListChecked = document.data["toDoListChecked"] as List<*>
 
                 for (item in toDoListChecked) {
+
                     arrayListChecked.add(item.toString())
+
+
                 }
+
+                val toDoList = document.data["toDoList"] as List<*>
+
+                for (item in toDoList) {
+
+                    arrayList.add(item.toString())
+
+
+                }
+                val color = document.getString("color").toString()
+
+                val longTask =
+                    LongTermTask(title, description, start, end,  arrayList, color, arrayListChecked)
+
+                task = longTask
+
+
+                val format = SimpleDateFormat("yyyy-MM-dd")
+                val startDate = format.parse(start)
+                val endDate = format.parse(end)
+
+
+                val diffInMillies = endDate!!.time - System.currentTimeMillis()
+                months = TimeUnit.MILLISECONDS.toDays(diffInMillies).toInt() / 30
+                days = TimeUnit.MILLISECONDS.toDays(diffInMillies).toInt() % 30
+                hours = TimeUnit.MILLISECONDS.toHours(diffInMillies).toInt() % 24
+
+
+                outputDateStrStart = SimpleDateFormat("dd MMM yyyy").format(startDate!!)
+                outputDateStrEnd = SimpleDateFormat("dd MMM yyyy").format(endDate!!)
+
+
+
+
+
+
+                progress =
+                    (arrayListChecked.size.toFloat() / (arrayList.size + arrayListChecked.size).toFloat())
+
+
             }
         }
-
 
 
     Column {
@@ -106,7 +180,7 @@ fun DetailPriorityTask(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = title!!,
+                text = task.title,
                 modifier = Modifier
                     .padding(start = 16.dp)
                     .wrapContentHeight()
@@ -145,6 +219,8 @@ fun DetailPriorityTask(
         Spacer(modifier = Modifier.height(20.dp))
 
         Row {
+
+
             Text(
 
                 text = "start", modifier = Modifier.padding(start = 20.dp),
@@ -159,14 +235,15 @@ fun DetailPriorityTask(
         }
 
         Row {
+
             Text(
-                text = start, modifier = Modifier.padding(start = 20.dp),
+                text = outputDateStrStart, modifier = Modifier.padding(start = 20.dp),
 
                 fontSize = 15.sp, fontWeight = FontWeight.Light, fontFamily = fontForDate,
             )
 
             Text(
-                text = end, modifier = Modifier.padding(start = 186.dp),
+                text = outputDateStrEnd, modifier = Modifier.padding(start = 186.dp),
                 fontSize = 15.sp, fontWeight = FontWeight.Light, fontFamily = fontForDate,
             )
         }
@@ -178,6 +255,7 @@ fun DetailPriorityTask(
 
 
         Row {
+
 
             Card(
                 modifier = Modifier
@@ -197,7 +275,7 @@ fun DetailPriorityTask(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "0",
+                        text = months.toString(),
                         fontSize = 40.sp,
                         fontWeight = FontWeight.Bold,
                         fontFamily = fontForDate,
@@ -230,7 +308,7 @@ fun DetailPriorityTask(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "2",
+                        text = days.toString(),
                         fontSize = 40.sp,
                         fontWeight = FontWeight.Bold,
                         fontFamily = fontForDate,
@@ -263,7 +341,7 @@ fun DetailPriorityTask(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "14",
+                        text = hours.toString(),
                         fontSize = 40.sp,
                         fontWeight = FontWeight.Bold,
                         fontFamily = fontForDate,
@@ -279,6 +357,25 @@ fun DetailPriorityTask(
                 }
             }
         }
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Column {
+            Text(
+                text = "Description", modifier = Modifier.padding(16.dp),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Medium,
+                fontFamily = fontForDate,
+                color = Color(0xFF4A4646)
+            )
+
+            Text(
+                text = task.description, modifier = Modifier.padding(16.dp),
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Normal,
+                fontFamily = fontForDate,
+                color = Color(0xFF4A4646)
+            )
+        }
 
 
         Spacer(modifier = Modifier.height(28.dp))
@@ -286,22 +383,41 @@ fun DetailPriorityTask(
 
         Text(
             text = "Progress", modifier = Modifier.padding(15.dp),
-            fontSize = 19.sp,
+            fontSize = 14.sp,
             fontWeight = FontWeight.Medium,
             fontFamily = fontForDate,
+            color = Color(0xFF4A4646)
         )
 
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+            LinearProgressIndicator(
+                progress = progress,
+                color = Color(0xFF006EE9),
+                modifier = Modifier
+                    .padding(horizontal = 12.dp)
+                    .fillMaxWidth()
+                    .scale(1.0f, 4.0f),
+                strokeCap = StrokeCap.Round,
+                trackColor = TextFieldGray,
 
-        LinearProgressIndicator(
 
-            color = Color(0xFF004797),
+                )
+
+        }
+
+        Text(
+            text = (progress * 100).toString() + "%",
             modifier = Modifier
-                .padding(start = 10.dp, end = 10.dp)
-                .fillMaxWidth()
-                .height(20.dp),
-            strokeCap = StrokeCap.Round,
-            trackColor = TextFieldGray
+                .padding(15.dp)
+                .align(Alignment.End),
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium,
+            fontFamily = fontForDate,
+            color = Color(0xFF4A4646)
         )
+
+
+
 
         Text(
             text = "To Do List", modifier = Modifier.padding(15.dp),
@@ -309,37 +425,101 @@ fun DetailPriorityTask(
             fontWeight = FontWeight.Medium,
             fontFamily = fontForDate,
         )
+        val mapOfToDo = task.toDoList.map { it to false }.toMap()
+        val mapOfToDoChecked = task.toDoListChecked.map { it to true }.toMap()
 
+        val allToDoList = mapOfToDoChecked + mapOfToDo
 
         LazyColumn(
             modifier = Modifier
                 .padding(16.dp)
         ) {
+            items(allToDoList.toList()) { (taskTitle, taskCompleted) ->
+                var isChecked by remember { mutableStateOf(taskCompleted) }
+                var color by remember { mutableStateOf(Color.Black) }
+                if (isChecked) {
+                    color = Color(0xFF006EE9)
+                } else {
+                    color = Color.Black
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(10.dp))
+                        .border(
+                            BorderStroke(0.dp, DefaultBlue), RoundedCornerShape(10.dp)
+                        )
+                        .padding(start = 16.dp, top = 4.dp, bottom = 4.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = taskTitle,
+                        color = color,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = fontForDate
+                    )
 
+                    Checkbox(checked = isChecked, onCheckedChange = { checked ->
+
+
+
+                        isChecked = checked
+
+                        if (!isChecked) {
+                            //checked listesinden çıkar uncheckede at
+
+                            db.collection("longterm").whereEqualTo("email", loggedInUserEmail)
+                                .whereEqualTo("title", task.title).get()
+                                .addOnSuccessListener { document ->
+                                    for (doc in document) {
+                                        db.collection("longterm").document(doc.id)
+                                            .update("toDoList", FieldValue.arrayUnion(taskTitle.toString()))
+
+                                    }
+
+                                }
+                            db.collection("longterm").whereEqualTo("email", loggedInUserEmail)
+                                .whereEqualTo("title", task.title).get()
+                                .addOnSuccessListener { document ->
+                                    for (doc in document) {
+                                        db.collection("longterm").document(doc.id)
+                                            .update(
+                                                "toDoListChecked",
+                                                FieldValue.arrayRemove(taskTitle.toString())
+                                            )
+                                    }
+                                }
+
+                        } else {
+                            db.collection("longterm").whereEqualTo("email", loggedInUserEmail)
+                                .whereEqualTo("title", task.title).get()
+                                .addOnSuccessListener { document ->
+                                    for (doc in document) {
+                                        db.collection("longterm").document(doc.id)
+                                            .update("toDoList", FieldValue.arrayRemove(taskTitle))
+
+                                    }
+
+                                }
+                            db.collection("longterm").whereEqualTo("email", loggedInUserEmail)
+                                .whereEqualTo("title", task.title).get()
+                                .addOnSuccessListener { document ->
+                                    for (doc in document) {
+                                        db.collection("longterm").document(doc.id)
+                                            .update(
+                                                "toDoListChecked",
+                                                FieldValue.arrayUnion(taskTitle)
+                                            )
+                                    }
+                                }
+                        }
+
+                    })
+                }
+            }
         }
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(10.dp))
-                .border(
-                    BorderStroke(0.dp, DefaultBlue), RoundedCornerShape(10.dp)
-                )
-                .padding(start = 16.dp, top = 4.dp, bottom = 4.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Medium,
-                fontFamily = fontForDate
-            )
-
-
-        }
-
-
     }
 }
 
