@@ -31,7 +31,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 
 @Composable
-fun AddtoDoListPage(
+fun EdittoDoListPage(
     modifier: Modifier = Modifier,
     navController: NavController
 ) {
@@ -40,7 +40,7 @@ fun AddtoDoListPage(
 
     val context = LocalContext.current
 
-    var typeSomething by remember {
+    var funcReq by remember {
         mutableStateOf("")
     }
 
@@ -55,9 +55,9 @@ fun AddtoDoListPage(
 
 
         TextField(
-            value = typeSomething,
-            onValueChange = { typeSomething = it },
-            placeholder = { Text("Type something...") },
+            value = funcReq,
+            onValueChange = { funcReq = it },
+            placeholder = { Text("Functionality requirements") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 24.dp)
@@ -69,17 +69,17 @@ fun AddtoDoListPage(
                 focusedContainerColor = Color.White
             ),
         )
-Button(onClick = { /*TODO*/ } ,modifier = Modifier
-    .fillMaxWidth()
-    .padding(horizontal = 16.dp)
-    .padding(top = 32.dp)
-    .height(48.dp),
-    colors = ButtonDefaults.buttonColors(containerColor = DefaultBlue)
+        Button(onClick = { /*TODO*/ } ,modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .padding(top = 32.dp)
+            .height(48.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = DefaultBlue)
 
 
-){
-    Text(text = "Done", color = Color.White)
-}
+        ){
+            Text(text = "Done", color = Color.White)
+        }
         Button(onClick = { /*TODO*/ } ,modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
@@ -92,8 +92,8 @@ Button(onClick = { /*TODO*/ } ,modifier = Modifier
             Text(text = "Cancel", color = Color.White)
         }
 
-}
-
-
     }
+
+
+}
 
