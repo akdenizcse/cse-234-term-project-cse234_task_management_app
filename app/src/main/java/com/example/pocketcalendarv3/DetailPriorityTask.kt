@@ -195,7 +195,7 @@ fun DetailPriorityTask(
             Spacer(modifier = Modifier.weight(0.2f))
 
             IconButton(
-                onClick = { navController.navigate("EditPriorityTask") },
+                onClick = { navController.navigate("EditPriorityTask/$loggedInUserEmail/${task.title}") },
                 modifier = Modifier
                     .padding(end = 16.dp)
                     .weight(0.1f)

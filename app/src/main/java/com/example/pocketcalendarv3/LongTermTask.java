@@ -1,5 +1,11 @@
 package com.example.pocketcalendarv3;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Firebase;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.sql.Array;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -98,5 +104,6 @@ public class LongTermTask {
     public void setColor(String color) {
         this.color = color;
     }
+
 
 }

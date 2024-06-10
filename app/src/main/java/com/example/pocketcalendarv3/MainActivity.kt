@@ -60,9 +60,11 @@ fun ChangePage() {
             val title = backStackEntry.arguments?.getString("title")
             DetailPriorityTask(navController = navController, loggedInUserEmail = loggedInUserEmail , title = title)
         }
-        composable(route = "EditPriorityTask/{loggedInUserEmail}") { backStackEntry ->
+        composable(route = "EditPriorityTask/{loggedInUserEmail}/{title}") { backStackEntry ->
             val loggedInUserEmail = backStackEntry.arguments?.getString("loggedInUserEmail")
-            EditPriorityTask(navController = navController, loggedInUserEmail = loggedInUserEmail)
+            val title = backStackEntry.arguments?.getString("title")
+
+            EditPriorityTask(navController = navController, loggedInUserEmail = loggedInUserEmail , title = title)
         }
         composable(route = "ChangePasswordPage/{loggedInUserEmail}") { backStackEntry ->
             val loggedInUserEmail = backStackEntry.arguments?.getString("loggedInUserEmail")

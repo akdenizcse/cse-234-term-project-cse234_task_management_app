@@ -20,6 +20,8 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -42,13 +44,96 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pocketcalendarv3.ui.theme.DefaultBlue
 import com.example.pocketcalendarv3.ui.theme.fontForDate
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
+import java.text.SimpleDateFormat
+import java.util.concurrent.TimeUnit
 
 @Composable
-fun EditPriorityTask(modifier: Modifier = Modifier, navController: NavController , loggedInUserEmail: String?) {
+fun EditPriorityTask(modifier: Modifier = Modifier, navController: NavController , loggedInUserEmail: String? , title: String?) {
 
     var name by remember {
         mutableStateOf("")
     }
+    var title by remember {
+        mutableStateOf(title?:"")
+    }
+
+    val db = Firebase.firestore
+
+
+
+    var task by remember {
+        mutableStateOf(
+            LongTermTask(
+                "",
+                "",
+                "",
+                "",
+                ArrayList(),
+                "",
+                ArrayList()
+            )
+        )
+    }
+
+    var outputDateStrStart by remember { mutableStateOf("") }
+    var outputDateStrEnd by remember { mutableStateOf("") }
+
+
+
+    db.collection("longterm").whereEqualTo("title", title).whereEqualTo("email", loggedInUserEmail)
+        .get().addOnSuccessListener {
+            for (document in it) {
+                val arrayList = ArrayList<String>()
+                val arrayListChecked = ArrayList<String>()
+
+
+                val start = document.getString("startDate").toString()
+                val end = document.getString("endDate").toString()
+                val description = document.getString("description").toString()
+
+
+                val toDoListChecked = document.data["toDoListChecked"] as List<*>
+
+                for (item in toDoListChecked) {
+
+                    arrayListChecked.add(item.toString())
+
+
+                }
+
+                val toDoList = document.data["toDoList"] as List<*>
+
+                for (item in toDoList) {
+
+                    arrayList.add(item.toString())
+
+
+                }
+                val color = document.getString("color").toString()
+
+                val longTask =
+                    LongTermTask(title, description, start, end,  arrayList, color, arrayListChecked)
+
+                task = longTask
+
+
+                val format = SimpleDateFormat("yyyy-MM-dd")
+                val startDate = format.parse(start)
+                val endDate = format.parse(end)
+
+
+                outputDateStrStart = SimpleDateFormat("dd MMM yyyy").format(startDate!!)
+                outputDateStrEnd = SimpleDateFormat("dd MMM yyyy").format(endDate!!)
+
+
+
+
+
+            }
+        }
+
 
     Column {
 
@@ -86,7 +171,7 @@ fun EditPriorityTask(modifier: Modifier = Modifier, navController: NavController
             contentAlignment = Alignment.TopCenter
         ) {
             Text(
-                text = "UI Design Project",
+                text = title,
                 modifier = Modifier
                     .wrapContentHeight(),
                 fontSize = 32.sp,
@@ -118,81 +203,7 @@ fun EditPriorityTask(modifier: Modifier = Modifier, navController: NavController
         }
 
 
-        Row {
 
-            IconButton(
-                onClick = { /*TODO*/ },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(7.dp)
-                    .weight(1f)
-                    .size(100.dp),
-                colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = Color(0xffcae1ff),
-                    contentColor = Color.Black,
-
-                    )
-            ) {
-
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-
-                    Icon(
-                        imageVector = Icons.Filled.CalendarToday,
-                        contentDescription = "",
-                        modifier = Modifier.padding(1.dp),
-                        tint = Color(0xff006EE9)
-                    )
-
-                    Text(
-                        text = "May-1-2024",
-                        fontSize = 17.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = fontForDate,
-                    )
-
-                }
-            }
-
-            IconButton(
-                onClick = { /*TODO*/ },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(7.dp)
-                    .weight(1f)
-                    .size(100.dp),
-                colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = Color(0xffcae1ff),
-                    contentColor = Color.Black,
-
-                    )
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-
-                    Icon(
-                        imageVector = Icons.Filled.CalendarToday,
-                        contentDescription = "",
-                        modifier = Modifier.padding(1.dp),
-                        tint = Color(0xff006EE9)
-                    )
-
-                    Text(
-                        text = "May-24-2024",
-                        fontSize = 17.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = fontForDate,
-                    )
-
-                }
-            }
-        }
 
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -219,7 +230,7 @@ fun EditPriorityTask(modifier: Modifier = Modifier, navController: NavController
         ) {
 
             TextField(
-                value = name, onValueChange = { name = it },
+                value = title, onValueChange = { title = it },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
