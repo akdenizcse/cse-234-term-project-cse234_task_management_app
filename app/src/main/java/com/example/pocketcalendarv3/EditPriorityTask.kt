@@ -102,7 +102,7 @@ fun EditPriorityTask(modifier: Modifier = Modifier, navController: NavController
         Row {
             Text(
                 text = "Start", modifier = Modifier.padding(start = 30.dp),
-                fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight.Bold,
                 fontFamily = fontForDate,
                 color = DefaultBlue,
                 fontSize = 17.sp
@@ -110,7 +110,7 @@ fun EditPriorityTask(modifier: Modifier = Modifier, navController: NavController
 
             Text(
                 text = "Ends", modifier = Modifier.padding(start = 160.dp),
-                fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight.Bold,
                 fontFamily = fontForDate,
                 color = DefaultBlue,
                 fontSize = 17.sp
@@ -274,7 +274,7 @@ fun EditPriorityTask(modifier: Modifier = Modifier, navController: NavController
 
 
         IconButton(
-            onClick = { },
+            onClick = { /*TODO*/ },
             modifier = Modifier.padding(start = 350.dp)
         ) {
             Icon(
@@ -331,6 +331,15 @@ fun EditPriorityTask(modifier: Modifier = Modifier, navController: NavController
         }
 
 
+
+
+
+
+        
+        
+        
+        
+        
     }
 
 
