@@ -1,11 +1,14 @@
 package com.example.pocketcalendarv3
 
+import android.app.DatePickerDialog
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,17 +18,23 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerState
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -38,29 +47,49 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pocketcalendarv3.ui.theme.DefaultBlue
+import com.example.pocketcalendarv3.ui.theme.SoftBlue
+import com.example.pocketcalendarv3.ui.theme.TextFieldGray
 import com.example.pocketcalendarv3.ui.theme.fontForDate
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
 @Composable
-fun EditPriorityTask(modifier: Modifier = Modifier, navController: NavController , loggedInUserEmail: String? , title: String?) {
+fun EditPriorityTask(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    loggedInUserEmail: String?,
+    title: String?
+) {
 
     var name by remember {
         mutableStateOf("")
     }
     var title by remember {
-        mutableStateOf(title?:"")
+        mutableStateOf(title ?: "")
     }
 
     val db = Firebase.firestore
 
+    var selectedDate by remember { mutableStateOf("") }
+    val context = LocalContext.current
+    val calendar = Calendar.getInstance()
+    val year = calendar.get(Calendar.YEAR)
+    val month = calendar.get(Calendar.MONTH)
+    val day = calendar.get(Calendar.DAY_OF_MONTH)
+    val months = listOf(
+        "Jan", "Feb", "Mar", "Apr", "May", "June",
+        "July", "Aug", "Sep", "Oct", "Nov", "Dec"
+    )
 
 
     var task by remember {
@@ -114,7 +143,7 @@ fun EditPriorityTask(modifier: Modifier = Modifier, navController: NavController
                 val color = document.getString("color").toString()
 
                 val longTask =
-                    LongTermTask(title, description, start, end,  arrayList, color, arrayListChecked)
+                    LongTermTask(title, description, start, end, arrayList, color, arrayListChecked)
 
                 task = longTask
 
@@ -126,9 +155,6 @@ fun EditPriorityTask(modifier: Modifier = Modifier, navController: NavController
 
                 outputDateStrStart = SimpleDateFormat("dd MMM yyyy").format(startDate!!)
                 outputDateStrEnd = SimpleDateFormat("dd MMM yyyy").format(endDate!!)
-
-
-
 
 
             }
@@ -184,23 +210,91 @@ fun EditPriorityTask(modifier: Modifier = Modifier, navController: NavController
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        Row {
-            Text(
-                text = "Start", modifier = Modifier.padding(start = 30.dp),
-                fontWeight = FontWeight.Bold,
-                fontFamily = fontForDate,
-                color = DefaultBlue,
-                fontSize = 17.sp
-            )
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp)
+        ) {
 
-            Text(
-                text = "Ends", modifier = Modifier.padding(start = 160.dp),
-                fontWeight = FontWeight.Bold,
-                fontFamily = fontForDate,
-                color = DefaultBlue,
-                fontSize = 17.sp
-            )
+            Column(horizontalAlignment = Alignment.Start) {
+                Text(
+                    text = "Start",
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = fontForDate,
+                    color = DefaultBlue,
+                    fontSize = 17.sp
+                )
+                Card(
+                    modifier = Modifier.clickable (enabled = false){
+
+
+                        DatePickerDialog(
+                            context,
+                            { _, selectedYear, selectedMonth, selectedDayOfMonth ->
+                                selectedDate =
+                                    "$selectedDayOfMonth ${months[selectedMonth]} $selectedYear"
+                            },
+                            year,
+                            month,
+                            day
+                        ).show()
+                    } , colors = CardDefaults.cardColors(
+                        containerColor = Color(0xFFEEF5FD),
+                    ), border = BorderStroke(0.dp, Color(0xffcae1ff))
+                ) {
+                    Row(modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp)) {
+                        Icon(Icons.Filled.CalendarToday, contentDescription = "" , tint = DefaultBlue)
+                        Text(
+                            text = outputDateStrStart,
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            fontFamily = fontForDate,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 16.sp
+                        )
+                    }
+                }
+            }
+            Column(horizontalAlignment = Alignment.Start) {
+                Text(
+                    text = "Ends",
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = fontForDate,
+                    color = DefaultBlue,
+                    fontSize = 17.sp
+                )
+
+                OutlinedCard(
+                    modifier = Modifier.clickable {
+                        DatePickerDialog(
+                            context,
+                            { _, selectedYear, selectedMonth, selectedDayOfMonth ->
+                                selectedDate =
+                                    "$selectedDayOfMonth ${months[selectedMonth]} $selectedYear"
+                            },
+                            year,
+                            month,
+                            day
+                        ).show()
+                    }, colors = CardDefaults.cardColors(
+                        containerColor = Color.White,
+                    ), border = BorderStroke(0.dp, Color(0xffcae1ff))
+                ) {
+                    Row(modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp)) {
+                        Icon(Icons.Filled.CalendarToday, contentDescription = "" , tint = DefaultBlue)
+                        Text(
+                            text = if (selectedDate.isEmpty()) outputDateStrEnd else " $selectedDate",
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            fontFamily = fontForDate,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 16.sp
+                        )
+                    }
+                }
+            }
+
+
         }
+
 
 
 
@@ -342,15 +436,6 @@ fun EditPriorityTask(modifier: Modifier = Modifier, navController: NavController
         }
 
 
-
-
-
-
-        
-        
-        
-        
-        
     }
 
 
