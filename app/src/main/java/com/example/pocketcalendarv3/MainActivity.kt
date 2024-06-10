@@ -81,8 +81,10 @@ fun ChangePage() {
         composable(route = "MyProfilePageView") {
             MyProfilePageView(navController = navController)
         }
-        composable(route = "EditDailyTaskPage") {
-            EditDailyTaskPage(navController = navController)
+        composable(route = "EditDailyTaskPage/{loggedInUserEmail}/{title}") { backStackEntry ->
+            val loggedInUserEmail = backStackEntry.arguments?.getString("loggedInUserEmail")
+            val title = backStackEntry.arguments?.getString("title")
+            EditDailyTaskPage(navController = navController, loggedInUserEmail = loggedInUserEmail , title = title)
         }
     }
 }

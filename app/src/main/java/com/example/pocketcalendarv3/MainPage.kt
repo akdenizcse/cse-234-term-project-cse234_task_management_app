@@ -318,7 +318,7 @@ fun MainPage(navController: NavController, loggedInUserEmail: String?) {
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
+                        Text(modifier = Modifier.clickable(onClick = {navController.navigate("EditDailyTaskPage/$loggedInUserEmail/${task.title}")}),
                             text = task.title,
                             color = color,
                             fontSize = 14.sp,
