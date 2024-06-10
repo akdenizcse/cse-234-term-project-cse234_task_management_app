@@ -319,11 +319,9 @@ fun EditDailyTaskPage(
                 .fillMaxWidth()
                 .size(80.dp)
                 .padding(12.dp),
-            colors = CardDefaults.cardColors(
+            colors = CardDefaults.outlinedCardColors(
                 containerColor = Color.White,
-                contentColor = Color.Black
-            ),
-            border = BorderStroke(2.dp, Color(0xffcae1ff))
+            ), border = BorderStroke(0.dp, Color(0xffcae1ff))
         ) {
 
             TextField(
