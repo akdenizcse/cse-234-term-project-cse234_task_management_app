@@ -159,7 +159,7 @@ fun UserPageView(navController: NavController, loggedInUserEmail: String?) {
 
 
                     ElevatedButton(
-                        onClick = { /*TODO*/ },
+                        onClick = { navController.navigate("MyProfilePageView/$loggedInUserEmail") },
                         modifier = Modifier.padding(start = 16.dp, bottom = 6.dp)
                     ) {
 
@@ -203,16 +203,20 @@ fun UserPageView(navController: NavController, loggedInUserEmail: String?) {
 
 
                     }
-                    ElevatedButton(onClick = { /*TODO*/ }, modifier = Modifier.padding(start = 16.dp)) {
+                    ElevatedButton(
+                        onClick = { /*TODO*/ },
+                        modifier = Modifier.padding(start = 16.dp)
+                    ) {
 
                         Icon(Icons.Filled.Logout, contentDescription = "")
                         Text(
-                            text = "Logout", color = Black, modifier = Modifier.padding(start = 16.dp)
+                            text = "Logout",
+                            color = Black,
+                            modifier = Modifier.padding(start = 16.dp)
                         )
                     }
 
                 }
-
 
 
             }
@@ -227,22 +231,34 @@ fun UserPageView(navController: NavController, loggedInUserEmail: String?) {
                 NavigationBar(
                     contentColor = Color(0xFFABCEF5),
                     containerColor = Color.White,
-                    modifier = Modifier.fillMaxSize().shadow(15.dp, RoundedCornerShape(15.dp), spotColor = Color(0xFFABCEF5))
+                    modifier = Modifier.fillMaxSize()
+                        .shadow(15.dp, RoundedCornerShape(15.dp), spotColor = Color(0xFFABCEF5))
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.SpaceEvenly,
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.fillMaxSize()
                     ) {
-                        IconButton(onClick = {navController.navigate("MainPage/${loggedInUserEmail}")}) {
-                            Icon(Icons.Rounded.Home, contentDescription = "", modifier = Modifier.scale(1.8f))
+                        IconButton(onClick = { navController.navigate("MainPage/$loggedInUserEmail") }) {
+                            Icon(
+                                Icons.Rounded.Home,
+                                contentDescription = "",
+                                modifier = Modifier.scale(1.8f)
+                            )
                         }
                         IconButton(onClick = { /*TODO*/ }) {
-                            Icon(Icons.Rounded.Add, contentDescription = "",modifier = Modifier
-                                .scale(1.8f))
+                            Icon(
+                                Icons.Rounded.Add, contentDescription = "", modifier = Modifier
+                                    .scale(1.8f)
+                            )
                         }
-                        IconButton(onClick = { navController.navigate("UserPage/${loggedInUserEmail}") }) {
-                            Icon(Icons.Rounded.Person, contentDescription = "",modifier = Modifier.scale(1.8f), tint = Color(0XFF006EE9))
+                        IconButton(onClick = { }) {
+                            Icon(
+                                Icons.Rounded.Person,
+                                contentDescription = "",
+                                modifier = Modifier.scale(1.8f),
+                                tint = Color(0XFF006EE9)
+                            )
                         }
                     }
                 }
@@ -253,3 +269,4 @@ fun UserPageView(navController: NavController, loggedInUserEmail: String?) {
 
 
 }
+

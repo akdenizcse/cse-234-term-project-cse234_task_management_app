@@ -73,12 +73,20 @@ fun RegisterPageView(modifier: Modifier = Modifier, navController: NavController
     var registerPasswordAgain by remember {
         mutableStateOf("")
     }
+    var profession by remember {
+        mutableStateOf("")
+    }
+    var dateOfBirth by remember {
+        mutableStateOf("")
+    }
 
 
     val user = hashMapOf(
         "username" to username,
         "email" to registerEmail,
         "password" to registerPassword,
+        "profession" to profession,
+        "dateOfBirth" to dateOfBirth
     )
 
 

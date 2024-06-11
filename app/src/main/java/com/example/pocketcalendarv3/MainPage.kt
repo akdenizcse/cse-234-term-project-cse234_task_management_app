@@ -374,7 +374,7 @@ fun MainPage(navController: NavController, loggedInUserEmail: String?) {
                         Icon(Icons.Rounded.Add, contentDescription = "",modifier = Modifier
                             .scale(1.8f))
                     }
-                    IconButton(onClick = { navController.navigate("UserPage/$loggedInUserEmail}") }) {
+                    IconButton(onClick = { navController.navigate("UserPage/$loggedInUserEmail") }) {
                         Icon(Icons.Rounded.Person, contentDescription = "",modifier = Modifier.scale(1.8f))
                     }
                 }

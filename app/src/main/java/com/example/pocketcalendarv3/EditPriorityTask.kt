@@ -25,6 +25,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -39,6 +41,8 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -95,9 +99,8 @@ fun EditPriorityTask(
 
     val months = listOf(
         "Jan", "Feb", "Mar", "Apr", "May", "June",
-        "July", "Aug", "Sep", "Oct","Nov","Dec")
-
-
+        "July", "Aug", "Sep", "Oct", "Nov", "Dec"
+    )
 
 
     var task by remember {
@@ -168,9 +171,12 @@ fun EditPriorityTask(
                 outputDateStrEnd = SimpleDateFormat("dd MMM yyyy").format(endDate!!)
 
 
-
             }
         }
+
+    var mergeList by remember { mutableStateOf(ArrayList<String>()) }
+
+    mergeList = (task.toDoList + task.toDoListChecked) as ArrayList<String>
 
 
 
@@ -276,8 +282,9 @@ fun EditPriorityTask(
                             context,
                             { _, selectedYear, selectedMonth, selectedDayOfMonth ->
                                 selectedDate =
-                                    "$selectedYear-${selectedMonth+1}-$selectedDayOfMonth"
-                                outputDateStrSelected = "$selectedDayOfMonth ${months[selectedMonth]} $selectedYear"
+                                    "$selectedYear-${selectedMonth + 1}-$selectedDayOfMonth"
+                                outputDateStrSelected =
+                                    "$selectedDayOfMonth ${months[selectedMonth]} $selectedYear"
                             },
                             year,
                             month,
@@ -367,11 +374,14 @@ fun EditPriorityTask(
             border = BorderStroke(2.dp, Color(0xffcae1ff))
         ) {
 
-            TextField(value = des, onValueChange = { des = it },
+            OutlinedTextField(
+                value = des, onValueChange = { des = it },
                 singleLine = true,
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .align(Alignment.Start),
 
-            )
+                )
         }
 
         Spacer(modifier = Modifier.height(5.dp))
@@ -384,29 +394,69 @@ fun EditPriorityTask(
             color = DefaultBlue
         )
 
-        LazyColumn(content = {
-            items(task.toDoList.size) { index ->
-                OutlinedCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(12.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.White
-                    ),
-                    border = BorderStroke(2.dp, Color(0xffcae1ff))
-                ) {
-                    Text(
-                        text = task.toDoList[index],
-                        modifier = Modifier.fillMaxWidth().padding(8.dp)
-                    )
+        LazyColumn(
+            content = {
+                items(mergeList.size) { index ->
+                    OutlinedCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(12.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = Color.White
+                        ),
+                        border = BorderStroke(0.dp, Color(0xffcae1ff))
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.fillMaxWidth() ){
+                                Text(
+                                    text = mergeList[index],
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                )
+                            IconButton(onClick = {
+                                if ( mergeList[index] in task.toDoList) {
+                                    db.collection("longterm").whereEqualTo("title", title).get()
+                                        .addOnSuccessListener { document ->
+                                            for (doc in document) {
+                                                db.collection("longterm").document(doc.id)
+                                                    .update(
+                                                        "toDoList",
+                                                        task.toDoList - mergeList[index]
+                                                    )
+                                            }
+                                        }
+                                } else {
+                                    db.collection("longterm").whereEqualTo("title", title).get()
+                                        .addOnSuccessListener { document ->
+                                            for (doc in document) {
+                                                db.collection("longterm").document(doc.id)
+                                                    .update(
+                                                        "toDoListChecked",
+                                                        task.toDoListChecked - mergeList[index]
+                                                    )
+                                            }
+                                        }
+                                }
+
+
+                            }) {
+                                Icon(Icons.Filled.Clear, contentDescription = "")
+                            }
+
+
+                            }
+                    }
+
+
                 }
 
 
-            }
-
-
-
-        }, modifier = Modifier.fillMaxWidth().height(125.dp))
+            }, modifier = Modifier
+                .fillMaxWidth()
+                .height(125.dp)
+        )
 
 
 
@@ -455,17 +505,27 @@ fun EditPriorityTask(
 
         IconButton(
             onClick = {
-                if(selectedDate == ""){
-                       selectedDate = task.endDate
+                if (selectedDate == "") {
+                    selectedDate = task.endDate
                 }
                 db.collection("longterm").whereEqualTo("title", title).get()
                     .addOnSuccessListener { document ->
                         for (doc in document) {
                             db.collection("longterm").document(doc.id)
-                                .update("endDate", selectedDate , "title" , titleTemp , "description" , des)
+                                .update(
+                                    "endDate",
+                                    selectedDate,
+                                    "title",
+                                    titleTemp,
+                                    "description",
+                                    des
+                                )
                         }
                     }
-                navController.previousBackStackEntry?.arguments?.putString("arg", "DetailPriorityTask/$loggedInUserEmail/$titleTemp")
+                navController.previousBackStackEntry?.arguments?.putString(
+                    "arg",
+                    "DetailPriorityTask/$loggedInUserEmail/$titleTemp"
+                )
                 navController.popBackStack()
             },
             modifier = Modifier
