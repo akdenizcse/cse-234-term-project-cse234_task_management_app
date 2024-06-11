@@ -329,7 +329,7 @@ fun EditPriorityTask(
         OutlinedCard(
             modifier = Modifier
                 .fillMaxWidth()
-                .size(75.dp)
+                .size(80.dp)
                 .padding(12.dp),
             colors = CardDefaults.cardColors(
                 containerColor = Color.White
