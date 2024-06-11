@@ -33,7 +33,9 @@ import com.google.firebase.firestore.firestore
 @Composable
 fun AddtoDoListPage(
     modifier: Modifier = Modifier,
-    navController: NavController
+    navController: NavController,
+    loggedInUserEmail: String?,
+    title: String?
 ) {
 
     val db = Firebase.firestore
@@ -69,18 +71,40 @@ fun AddtoDoListPage(
                 focusedContainerColor = Color.White
             ),
         )
-Button(onClick = { /*TODO*/ } ,modifier = Modifier
-    .fillMaxWidth()
-    .padding(horizontal = 16.dp)
-    .padding(top = 32.dp)
-    .height(48.dp),
-    colors = ButtonDefaults.buttonColors(containerColor = DefaultBlue)
+        Button(onClick = {
+            db.collection("longterm").whereEqualTo("title", title)
+                .whereEqualTo("email", loggedInUserEmail).get().addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        db.collection("longterm").document(document.id).get()
+                            .addOnSuccessListener { document ->
+                                val arrayList = ArrayList<String>()
+                                val toDoList = document.data?.get("toDoList") as List<*>
+
+                                for (item in toDoList) {
+
+                                    arrayList.add(item.toString())
 
 
-){
-    Text(text = "Done", color = Color.White)
-}
-        Button(onClick = { /*TODO*/ } ,modifier = Modifier
+                                }
+
+                                arrayList.add(typeSomething)
+                                db.collection("longterm").document(document.id)
+                                    .update("toDoList", arrayList)
+
+
+                                navController.popBackStack()
+
+                            }
+
+                    }
+                }
+        }
+
+
+        ,
+
+
+            modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .padding(top = 32.dp)
@@ -88,12 +112,24 @@ Button(onClick = { /*TODO*/ } ,modifier = Modifier
             colors = ButtonDefaults.buttonColors(containerColor = DefaultBlue)
 
 
-        ){
+        ) {
+            Text(text = "Done", color = Color.White)
+        }
+        Button(
+            onClick = { navController.popBackStack() }, modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .padding(top = 32.dp)
+                .height(48.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = DefaultBlue)
+
+
+        ) {
             Text(text = "Cancel", color = Color.White)
         }
 
-}
-
-
     }
+
+
+}
 

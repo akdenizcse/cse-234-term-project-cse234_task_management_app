@@ -58,13 +58,21 @@ fun ChangePage() {
         composable(route = "DetailPriorityTask/{loggedInUserEmail}/{title}") { backStackEntry ->
             val loggedInUserEmail = backStackEntry.arguments?.getString("loggedInUserEmail")
             val title = backStackEntry.arguments?.getString("title")
-            DetailPriorityTask(navController = navController, loggedInUserEmail = loggedInUserEmail , title = title)
+            DetailPriorityTask(
+                navController = navController,
+                loggedInUserEmail = loggedInUserEmail,
+                title = title
+            )
         }
         composable(route = "EditPriorityTask/{loggedInUserEmail}/{title}") { backStackEntry ->
             val loggedInUserEmail = backStackEntry.arguments?.getString("loggedInUserEmail")
             val title = backStackEntry.arguments?.getString("title")
 
-            EditPriorityTask(navController = navController, loggedInUserEmail = loggedInUserEmail , title = title)
+            EditPriorityTask(
+                navController = navController,
+                loggedInUserEmail = loggedInUserEmail,
+                title = title
+            )
         }
         composable(route = "ChangePasswordPage/{loggedInUserEmail}") { backStackEntry ->
             val loggedInUserEmail = backStackEntry.arguments?.getString("loggedInUserEmail")
@@ -72,8 +80,10 @@ fun ChangePage() {
                 navController = navController, loggedInUserEmail = loggedInUserEmail
             )
         }
-        composable(route = "AddtoDoListPage") {
-            AddtoDoListPage(navController = navController)
+        composable(route = "AddtoDoListPage/{loggedInUserEmail}/{title}") { backStackEntry ->
+            val loggedInUserEmail = backStackEntry.arguments?.getString("loggedInUserEmail")
+            val title = backStackEntry.arguments?.getString("title")
+            AddtoDoListPage(navController = navController ,loggedInUserEmail = loggedInUserEmail, title = title)
         }
         composable(route = "EdittoDoListPage") {
             EdittoDoListPage(navController = navController)

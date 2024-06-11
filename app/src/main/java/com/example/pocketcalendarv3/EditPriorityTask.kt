@@ -1,6 +1,7 @@
 package com.example.pocketcalendarv3
 
 import android.app.DatePickerDialog
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -71,11 +73,15 @@ fun EditPriorityTask(
     title: String?
 ) {
 
-    var name by remember {
-        mutableStateOf("")
-    }
+
     var title by remember {
         mutableStateOf(title ?: "")
+    }
+    var titleTemp by remember {
+        mutableStateOf(title ?: "")
+    }
+    var des by remember {
+        mutableStateOf("")
     }
 
     val db = Firebase.firestore
@@ -86,10 +92,12 @@ fun EditPriorityTask(
     val year = calendar.get(Calendar.YEAR)
     val month = calendar.get(Calendar.MONTH)
     val day = calendar.get(Calendar.DAY_OF_MONTH)
+
     val months = listOf(
         "Jan", "Feb", "Mar", "Apr", "May", "June",
-        "July", "Aug", "Sep", "Oct", "Nov", "Dec"
-    )
+        "July", "Aug", "Sep", "Oct","Nov","Dec")
+
+
 
 
     var task by remember {
@@ -108,6 +116,7 @@ fun EditPriorityTask(
 
     var outputDateStrStart by remember { mutableStateOf("") }
     var outputDateStrEnd by remember { mutableStateOf("") }
+    var outputDateStrSelected by remember { mutableStateOf("") }
 
 
 
@@ -121,6 +130,8 @@ fun EditPriorityTask(
                 val start = document.getString("startDate").toString()
                 val end = document.getString("endDate").toString()
                 val description = document.getString("description").toString()
+
+                des = description
 
 
                 val toDoListChecked = document.data["toDoListChecked"] as List<*>
@@ -157,8 +168,11 @@ fun EditPriorityTask(
                 outputDateStrEnd = SimpleDateFormat("dd MMM yyyy").format(endDate!!)
 
 
+
             }
         }
+
+
 
 
     Column {
@@ -197,7 +211,7 @@ fun EditPriorityTask(
             contentAlignment = Alignment.TopCenter
         ) {
             Text(
-                text = title,
+                text = titleTemp,
                 modifier = Modifier
                     .wrapContentHeight(),
                 fontSize = 32.sp,
@@ -225,25 +239,18 @@ fun EditPriorityTask(
                     fontSize = 17.sp
                 )
                 Card(
-                    modifier = Modifier.clickable (enabled = false){
+                    modifier = Modifier.clickable(enabled = false) {
 
-
-                        DatePickerDialog(
-                            context,
-                            { _, selectedYear, selectedMonth, selectedDayOfMonth ->
-                                selectedDate =
-                                    "$selectedDayOfMonth ${months[selectedMonth]} $selectedYear"
-                            },
-                            year,
-                            month,
-                            day
-                        ).show()
-                    } , colors = CardDefaults.cardColors(
+                    }, colors = CardDefaults.cardColors(
                         containerColor = Color(0xFFEEF5FD),
                     ), border = BorderStroke(0.dp, Color(0xffcae1ff))
                 ) {
                     Row(modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp)) {
-                        Icon(Icons.Filled.CalendarToday, contentDescription = "" , tint = DefaultBlue)
+                        Icon(
+                            Icons.Filled.CalendarToday,
+                            contentDescription = "",
+                            tint = DefaultBlue
+                        )
                         Text(
                             text = outputDateStrStart,
                             modifier = Modifier.padding(horizontal = 16.dp),
@@ -269,20 +276,28 @@ fun EditPriorityTask(
                             context,
                             { _, selectedYear, selectedMonth, selectedDayOfMonth ->
                                 selectedDate =
-                                    "$selectedDayOfMonth ${months[selectedMonth]} $selectedYear"
+                                    "$selectedYear-${selectedMonth+1}-$selectedDayOfMonth"
+                                outputDateStrSelected = "$selectedDayOfMonth ${months[selectedMonth]} $selectedYear"
                             },
                             year,
                             month,
                             day
                         ).show()
+
+
                     }, colors = CardDefaults.cardColors(
                         containerColor = Color.White,
                     ), border = BorderStroke(0.dp, Color(0xffcae1ff))
                 ) {
                     Row(modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp)) {
-                        Icon(Icons.Filled.CalendarToday, contentDescription = "" , tint = DefaultBlue)
+                        Icon(
+                            Icons.Filled.CalendarToday,
+                            contentDescription = "",
+                            tint = DefaultBlue
+                        )
+
                         Text(
-                            text = if (selectedDate.isEmpty()) outputDateStrEnd else " $selectedDate",
+                            text = if (selectedDate.isEmpty()) outputDateStrEnd else " $outputDateStrSelected",
                             modifier = Modifier.padding(horizontal = 16.dp),
                             fontFamily = fontForDate,
                             fontWeight = FontWeight.Normal,
@@ -317,14 +332,13 @@ fun EditPriorityTask(
                 .size(75.dp)
                 .padding(12.dp),
             colors = CardDefaults.cardColors(
-                containerColor = Color.White,
-                contentColor = Color.Black
+                containerColor = Color.White
             ),
             border = BorderStroke(2.dp, Color(0xffcae1ff))
         ) {
 
             TextField(
-                value = title, onValueChange = { title = it },
+                value = titleTemp, onValueChange = { titleTemp = it },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -353,12 +367,10 @@ fun EditPriorityTask(
             border = BorderStroke(2.dp, Color(0xffcae1ff))
         ) {
 
-            TextField(value = name, onValueChange = { name = it },
+            TextField(value = des, onValueChange = { des = it },
                 singleLine = true,
                 modifier = Modifier.fillMaxSize(),
-                placeholder = {
-                    Text("Write about it...")
-                }
+
             )
         }
 
@@ -372,14 +384,38 @@ fun EditPriorityTask(
             color = DefaultBlue
         )
 
+        LazyColumn(content = {
+            items(task.toDoList.size) { index ->
+                OutlinedCard(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.White
+                    ),
+                    border = BorderStroke(2.dp, Color(0xffcae1ff))
+                ) {
+                    Text(
+                        text = task.toDoList[index],
+                        modifier = Modifier.fillMaxWidth().padding(8.dp)
+                    )
+                }
+
+
+            }
 
 
 
-        Spacer(modifier = Modifier.height(50.dp))
+        }, modifier = Modifier.fillMaxWidth().height(125.dp))
+
+
+
+
+
 
 
         IconButton(
-            onClick = { /*TODO*/ },
+            onClick = { navController.navigate("AddtoDoListPage/$loggedInUserEmail/$title") },
             modifier = Modifier.padding(start = 350.dp)
         ) {
             Icon(
@@ -418,7 +454,20 @@ fun EditPriorityTask(
         }
 
         IconButton(
-            onClick = { /*TODO*/ },
+            onClick = {
+                if(selectedDate == ""){
+                       selectedDate = task.endDate
+                }
+                db.collection("longterm").whereEqualTo("title", title).get()
+                    .addOnSuccessListener { document ->
+                        for (doc in document) {
+                            db.collection("longterm").document(doc.id)
+                                .update("endDate", selectedDate , "title" , titleTemp , "description" , des)
+                        }
+                    }
+                navController.previousBackStackEntry?.arguments?.putString("arg", "DetailPriorityTask/$loggedInUserEmail/$titleTemp")
+                navController.popBackStack()
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp),
