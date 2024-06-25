@@ -143,7 +143,7 @@ fun UserPageView(navController: NavController, loggedInUserEmail: String?) {
                             DefaultBlue
                         )
                         Text(
-                            text = "... Task Completed",
+                            text = "0 Task Completed",
                             color = Black,
                             modifier = Modifier,
                             fontSize = 15.sp
@@ -175,20 +175,6 @@ fun UserPageView(navController: NavController, loggedInUserEmail: String?) {
 
                     }
                     ElevatedButton(
-                        onClick = { /*TODO*/ },
-                        modifier = Modifier.padding(start = 16.dp, bottom = 6.dp)
-                    ) {
-                        Icon(Icons.Filled.StackedBarChart, contentDescription = "")
-
-                        Text(
-                            text = "Statistic",
-                            color = Black,
-                            modifier = Modifier.padding(start = 16.dp)
-                        )
-
-
-                    }
-                    ElevatedButton(
                         onClick = { navController.navigate("ChangePasswordPage/${loggedInUserEmail}") },
                         modifier = Modifier.padding(start = 16.dp, bottom = 6.dp)
                     ) {
@@ -204,7 +190,7 @@ fun UserPageView(navController: NavController, loggedInUserEmail: String?) {
 
                     }
                     ElevatedButton(
-                        onClick = { /*TODO*/ },
+                        onClick = { navController.navigate("LoginPage")},
                         modifier = Modifier.padding(start = 16.dp)
                     ) {
 
