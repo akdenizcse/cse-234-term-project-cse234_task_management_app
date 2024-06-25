@@ -101,6 +101,10 @@ fun ChangePage() {
             val loggedInUserEmail = backStackEntry.arguments?.getString("loggedInUserEmail")
             AddPriorityTask(navController = navController, loggedInUserEmail = loggedInUserEmail)
         }
+        composable(route = "AddDailyTask/{loggedInUserEmail}") {backStackEntry ->
+            val loggedInUserEmail = backStackEntry.arguments?.getString("loggedInUserEmail")
+            AddDailyTask(navController = navController, loggedInUserEmail = loggedInUserEmail)
+        }
 
 
     }

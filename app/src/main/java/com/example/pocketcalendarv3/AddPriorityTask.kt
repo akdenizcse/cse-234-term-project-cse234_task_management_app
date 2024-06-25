@@ -23,7 +23,6 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -56,7 +55,8 @@ import java.util.Date
 @Composable
 fun AddPriorityTask(modifier: Modifier = Modifier, navController: NavController,loggedInUserEmail:String?) {
 
-    var selectedDate by remember { mutableStateOf("") }
+    var selectedEndDate by remember { mutableStateOf("") }
+    var selectedStartDate by remember { mutableStateOf("") }
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
     val year = calendar.get(Calendar.YEAR)
@@ -150,32 +150,31 @@ fun AddPriorityTask(modifier: Modifier = Modifier, navController: NavController,
 
     Column {
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(DefaultBlue)
-                .size(150.dp)
-                .padding(start = 16.dp, top = 50.dp)
-        ) {
-
-
-            ElevatedButton(onClick = { navController.popBackStack() }) {
+        Row {
+            IconButton(onClick = { navController.popBackStack() }) {
                 Icon(
                     Icons.Filled.ArrowBack, contentDescription = "",
-                    tint = DefaultBlue,
+                    tint = DefaultBlue
                 )
             }
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(1f)
+                .padding(10.dp)
+                .border(BorderStroke(3.dp, Color(0xffcae1ff))),
+            contentAlignment = Alignment.TopCenter
+        ) {
             Text(
                 text = "Add Task",
                 modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .padding(bottom = 45.dp, start = 73.dp),
-                Color.White,
+                    .wrapContentHeight(),
+                fontSize = 20.sp,
+                color = DefaultBlue,
+                fontWeight = FontWeight.Bold,
                 fontFamily = fontForDate,
-                fontSize = 17.sp,
-                fontWeight = FontWeight.SemiBold,
-
-                )
+            )
         }
 
         Spacer(modifier = Modifier.height(15.dp))
@@ -199,13 +198,13 @@ fun AddPriorityTask(modifier: Modifier = Modifier, navController: NavController,
                     fontSize = 17.sp
                 )
                 Card(
-                    modifier = Modifier.clickable (enabled = false){
+                    modifier = Modifier.clickable (enabled = true){
 
 
                         DatePickerDialog(
                             context,
                             { _, selectedYear, selectedMonth, selectedDayOfMonth ->
-                                selectedDate =
+                                selectedStartDate =
                                     "$selectedDayOfMonth ${months[selectedMonth]} $selectedYear"
                             },
                             year,
@@ -219,7 +218,7 @@ fun AddPriorityTask(modifier: Modifier = Modifier, navController: NavController,
                     Row(modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp)) {
                         Icon(Icons.Filled.CalendarToday, contentDescription = "" , tint = DefaultBlue)
                         Text(
-                            text = outputDateStrToday,
+                            text = if (selectedStartDate.isEmpty()) outputDateStrToday else " $selectedStartDate",
                             modifier = Modifier.padding(horizontal = 16.dp),
                             fontFamily = fontForDate,
                             fontWeight = FontWeight.Normal,
@@ -242,7 +241,7 @@ fun AddPriorityTask(modifier: Modifier = Modifier, navController: NavController,
                         DatePickerDialog(
                             context,
                             { _, selectedYear, selectedMonth, selectedDayOfMonth ->
-                                selectedDate =
+                                selectedEndDate =
                                     "$selectedDayOfMonth ${months[selectedMonth]} $selectedYear"
                             },
                             year,
@@ -256,7 +255,7 @@ fun AddPriorityTask(modifier: Modifier = Modifier, navController: NavController,
                     Row(modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp)) {
                         Icon(Icons.Filled.CalendarToday, contentDescription = "" , tint = DefaultBlue)
                         Text(
-                            text = if (selectedDate.isEmpty()) outputDateStrToday else " $selectedDate",
+                            text = if (selectedEndDate.isEmpty()) outputDateStrToday else " $selectedEndDate",
                             modifier = Modifier.padding(horizontal = 16.dp),
                             fontFamily = fontForDate,
                             fontWeight = FontWeight.Normal,
@@ -270,15 +269,15 @@ fun AddPriorityTask(modifier: Modifier = Modifier, navController: NavController,
         }
 
 
-    Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(30.dp))
 
-    Text(
-        text = "Title", modifier = Modifier.padding(start = 30.dp),
-        fontSize = 17.sp,
-        fontWeight = FontWeight.Bold,
-        fontFamily = fontForDate,
-        color = DefaultBlue
-    )
+        Text(
+            text = "Title", modifier = Modifier.padding(start = 30.dp),
+            fontSize = 17.sp,
+            fontWeight = FontWeight.Bold,
+            fontFamily = fontForDate,
+            color = DefaultBlue
+        )
 
         OutlinedCard(
             modifier = Modifier
@@ -314,41 +313,42 @@ fun AddPriorityTask(modifier: Modifier = Modifier, navController: NavController,
         )
 
 
-Row {
+        Row {
 
-    OutlinedCard(
-        modifier = Modifier.weight(1f)
-            .size(100.dp)
-            .padding(20.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White,
-            contentColor = DefaultBlue
-        ),
-        border = BorderStroke(2.dp, Color(0xffcae1ff))
-    ){
-        IconButton(onClick = { /*TODO*/ },modifier =Modifier.fillMaxSize()) { 
-Text(text = "Priority Task")
+
+            OutlinedCard(
+                modifier = Modifier.weight(1f)
+                    .size(100.dp)
+                    .padding(20.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = DefaultBlue,
+                    contentColor = Color.White
+                ),
+                border = BorderStroke(2.dp, Color(0xffcae1ff))
+            ){
+                IconButton(onClick = { /*TODO*/ },modifier =Modifier.fillMaxSize()) {
+                    Text(text = "Priority Task")
+                }
+            }
+
+            OutlinedCard(
+                modifier = Modifier.weight(1f)
+                    .size(100.dp)
+                    .padding(20.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.White,
+                    contentColor = DefaultBlue
+                ),
+                border = BorderStroke(2.dp, Color(0xffcae1ff))
+            ){
+                IconButton(onClick = {  navController.navigate("AddDailyTask/$loggedInUserEmail") },modifier =Modifier.fillMaxSize()) {
+                    Text(text = "Daily Task")
+                }
+            }
+
+
+
         }
-    }
-
-    OutlinedCard(
-        modifier = Modifier.weight(1f)
-            .size(100.dp)
-            .padding(20.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White,
-            contentColor = DefaultBlue
-        ),
-        border = BorderStroke(2.dp, Color(0xffcae1ff))
-    ){
-        IconButton(onClick = { /*TODO*/ },modifier =Modifier.fillMaxSize()) {
-            Text(text = "Daily Task")
-        }
-    }
-
-
-
-    }
 
 
 
@@ -438,6 +438,6 @@ Text(text = "Priority Task")
             )
         }
 
-}
+    }
 
 }
