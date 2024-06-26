@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "487533948908",
+    "project_id": "pocketcalendarv3",
+    "storage_bucket": "pocketcalendarv3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:487533948908:android:5fa6d3c7a97fd359fbdac9",
+        "android_client_info": {
+          "package_name": "com.example.pocketcalendarv3"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2Z6soV6_u_bNP19jQTfWe-Vr6xSj4L0E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
