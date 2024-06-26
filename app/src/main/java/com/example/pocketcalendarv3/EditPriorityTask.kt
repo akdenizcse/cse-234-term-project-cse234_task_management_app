@@ -183,34 +183,38 @@ fun EditPriorityTask(
 
     Column {
 
-        Row {
-            IconButton(onClick = { navController.popBackStack() }) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(DefaultBlue)
+                .size(150.dp)
+                .padding(start = 16.dp, top = 50.dp)
+        ) {
+
+
+            ElevatedButton(onClick = { navController.popBackStack() }) {
                 Icon(
                     Icons.Filled.ArrowBack, contentDescription = "",
-                    tint = DefaultBlue
+                    tint = DefaultBlue,
                 )
             }
-        }
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(1f)
-                .padding(10.dp)
-                .border(BorderStroke(3.dp, Color(0xffcae1ff))),
-            contentAlignment = Alignment.TopCenter
-        ) {
             Text(
                 text = "Edit Task",
                 modifier = Modifier
-                    .wrapContentHeight(),
-                fontSize = 20.sp,
-                color = DefaultBlue,
-                fontWeight = FontWeight.Bold,
+                    .align(Alignment.CenterVertically)
+                    .padding(bottom = 45.dp, start = 73.dp),
+                Color.White,
                 fontFamily = fontForDate,
-            )
+                fontSize = 17.sp,
+                fontWeight = FontWeight.SemiBold,
+
+                )
         }
 
         Spacer(modifier = Modifier.height(15.dp))
+
+
+
 
         Box(
             modifier = Modifier.fillMaxWidth(1f),
@@ -455,7 +459,7 @@ fun EditPriorityTask(
 
             }, modifier = Modifier
                 .fillMaxWidth()
-                .height(125.dp)
+                .height(50.dp)
         )
 
 
@@ -466,7 +470,7 @@ fun EditPriorityTask(
 
         IconButton(
             onClick = { navController.navigate("AddtoDoListPage/$loggedInUserEmail/$title") },
-            modifier = Modifier.padding(start = 350.dp)
+            modifier = Modifier.padding(start = 250.dp)
         ) {
             Icon(
                 Icons.Filled.Add, contentDescription = "",

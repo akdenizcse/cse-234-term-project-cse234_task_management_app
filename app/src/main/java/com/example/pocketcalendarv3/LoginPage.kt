@@ -220,11 +220,7 @@ fun LoginPageView(modifier: Modifier = Modifier, navController: NavController) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
 
 
-            /*Button(
-                onClick = { navController.navigate("UserPage/${email}") }, modifier = Modifier.size(45.dp)
-            ) {
 
-            }*/
             Image(
                 painter = painterResource(id = R.drawable.logo_foreground),
                 contentDescription = "",
